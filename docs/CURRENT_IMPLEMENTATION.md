@@ -8,6 +8,7 @@ At this stage, the base `FontGallery` application flow has been implemented to:
 - extract fonts from `.deb` packages into a master collection;
 - analyze the master collection;
 - derive subsets for Spanish-capable fonts and technical fonts.
+- generate HTML albums for the main, Spanish, and technical collections.
 
 ## Current project structure
 
@@ -27,6 +28,7 @@ The main window already includes these buttons:
 - `Preparar estructura`
 - `Extraer todas las fuentes a album-fuentes`
 - `Analizar y clasificar colección maestra`
+- `Generar indices HTML`
 - `Actualizar estado`
 
 It also shows:
@@ -41,6 +43,7 @@ It also shows:
 - `fontgallery/services/workspace.py`
 - `fontgallery/services/extraction.py`
 - `fontgallery/services/analysis.py`
+- `fontgallery/services/html_generation.py`
 
 ## Implemented flow
 
@@ -122,6 +125,23 @@ Current rules:
 - `album-fuentes-espanol` receives fonts with Spanish support that are not technical;
 - `album-fuentes-tecnicas` receives fonts classified as technical.
 
+### 5. Generate HTML albums
+
+`HtmlGenerationService` generates these files:
+
+- `album-fuentes/album-fuentes.html`
+- `album-fuentes-espanol/album-fuentes-espanol.html`
+- `album-fuentes-tecnicas/album-fuentes-tecnicas.html`
+
+Current behavior:
+
+- defines one `@font-face` rule per extracted font;
+- renders stable specimen blocks for each font;
+- uses a general sample text for the main and Spanish albums;
+- uses a technical sample text for the technical album;
+- excludes technical fonts from the main album;
+- writes an exclusion report for technical fonts removed from the main album.
+
 ## Current ROADMAP status
 
 These blocks are already implemented:
@@ -133,6 +153,7 @@ These blocks are already implemented:
 - duplicate detection and extraction error handling;
 - master collection analysis;
 - derivation into Spanish and technical albums.
+- HTML generation for all three albums from the GUI.
 
 ## External dependencies used by the current code
 
@@ -146,9 +167,9 @@ Without these tools, extraction and analysis will not work.
 ## Current limitations
 
 - real write-permission checks are not implemented yet;
-- HTML index generation is not implemented in the GUI yet;
 - PNG card generation is not implemented in the GUI yet;
 - PDF generation is not implemented in the GUI yet;
+- HTML generation currently depends on the extracted directories already being present;
 - technical font detection is still heuristic-based;
 - additional designer-oriented filters such as monospaced, serif, or display are not implemented yet;
 - the interface still runs everything on the main thread, so large jobs may freeze the window.
@@ -167,14 +188,9 @@ python3 main.py
 2. Click `Preparar estructura`.
 3. Click `Extraer todas las fuentes a album-fuentes`.
 4. Click `Analizar y clasificar colección maestra`.
-5. Review the log panel and the generated folders.
+5. Click `Generar indices HTML`.
+6. Review the log panel and the generated folders.
 
 ## Recommended next step
 
-The next most useful step is to reuse the logic already developed in the previous scripts to generate:
-
-- `album-fuentes/album-fuentes.html`
-- `album-fuentes-espanol/album-fuentes-espanol.html`
-- `album-fuentes-tecnicas/album-fuentes-tecnicas.html`
-
-The recommended approach is to move that logic into new services so that the GUI only orchestrates the process and does not contain business logic.
+The next most useful step is to add PNG card generation as a reusable service and connect it to the GUI, using the same album structure already produced by extraction, analysis, and HTML generation.

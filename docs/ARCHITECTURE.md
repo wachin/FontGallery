@@ -20,7 +20,7 @@ The architecture is intentionally split between:
 - filesystem and workspace management;
 - extraction logic;
 - font analysis logic;
-- future output generation services.
+- output generation services.
 
 ## Current module layout
 
@@ -81,9 +81,10 @@ Derived paths already modeled:
 Future expansion:
 
 - card directories;
-- HTML output paths;
 - PDF output paths;
 - stronger write-permission validation.
+
+HTML output paths are now modeled in the workspace service.
 
 ### Extraction service
 
@@ -137,6 +138,30 @@ Architectural notes:
 - this separation makes future derived collections cheaper and easier to maintain;
 - technical-font detection is currently heuristic and should remain configurable in the future.
 
+### HTML generation service
+
+- `fontgallery/services/html_generation.py`
+
+Responsibilities:
+
+- generate HTML indexes for the main, Spanish, and technical albums;
+- embed local extracted font files with `@font-face`;
+- exclude technical fonts from the main album;
+- generate a technical-font exclusion report for the main album;
+- produce print-friendly output intended for browser viewing and manual PDF printing.
+
+Primary outputs:
+
+- `album-fuentes/album-fuentes.html`
+- `album-fuentes-espanol/album-fuentes-espanol.html`
+- `album-fuentes-tecnicas/album-fuentes-tecnicas.html`
+
+Architectural notes:
+
+- this service works from extracted directories, not from `.deb` packages;
+- it reuses the same classification direction established by the analysis stage;
+- it is the first output-generation service integrated into the GUI.
+
 ## Data flow
 
 The current data flow is:
@@ -148,6 +173,7 @@ The current data flow is:
 5. `AnalysisService` derives:
    - Spanish-capable non-technical fonts;
    - technical fonts.
+6. `HtmlGenerationService` renders the HTML albums from those extracted directories.
 
 This establishes `album-fuentes` as the source of truth for later album generation.
 
@@ -193,22 +219,6 @@ Likely future dependencies:
 - `Pillow` for image cards;
 - browser or renderer integration only if needed for HTML-to-PDF workflows.
 
-## Planned modules
-
-The next likely modules are:
-
-### HTML generation service
-
-Proposed file:
-
-- `fontgallery/services/html_generation.py`
-
-Responsibilities:
-
-- generate HTML indexes for each album;
-- reuse extracted-font metadata and classification results;
-- write self-contained HTML files for browser viewing and print-to-PDF workflows.
-
 ### Card generation service
 
 Proposed file:
@@ -238,14 +248,13 @@ Responsibilities:
 - long-running operations still execute on the GUI thread;
 - write checks are still shallow;
 - technical classification may need richer rules and documentation;
-- HTML generation logic from older scripts has not yet been migrated into reusable services;
 - there is not yet a persistent metadata cache.
 
 ## Recommended near-term direction
 
 The next architectural step should be:
 
-1. introduce an HTML generation service;
+1. introduce a card generation service;
 2. define a reusable font record format shared by extraction, analysis, and HTML generation;
 3. keep the GUI limited to starting jobs and showing results;
 4. prepare later threading or worker infrastructure once output generation is integrated.

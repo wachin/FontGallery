@@ -57,6 +57,18 @@ class WorkspaceService:
     def album_tech_extract_dir(self) -> Path:
         return self.album_tech_dir / "fuentes-extraidas"
 
+    @property
+    def album_main_html_path(self) -> Path:
+        return self.album_main_dir / "album-fuentes.html"
+
+    @property
+    def album_es_html_path(self) -> Path:
+        return self.album_es_dir / "album-fuentes-espanol.html"
+
+    @property
+    def album_tech_html_path(self) -> Path:
+        return self.album_tech_dir / "album-fuentes-tecnicas.html"
+
     def path_status(self) -> list[dict[str, str | bool]]:
         statuses: list[dict[str, str | bool]] = []
         for item in self.managed_paths:

@@ -68,9 +68,9 @@
 
 ### Paso 5. Generar indices HTML
 
-- [ ] Crear `album-fuentes/album-fuentes.html`.
-- [ ] Crear `album-fuentes-espanol/album-fuentes-espanol.html`.
-- [ ] Crear `album-fuentes-tecnicas/album-fuentes-tecnicas.html`.
+- [x] Crear `album-fuentes/album-fuentes.html`.
+- [x] Crear `album-fuentes-espanol/album-fuentes-espanol.html`.
+- [x] Crear `album-fuentes-tecnicas/album-fuentes-tecnicas.html`.
 
 ### Paso 6. Generar tarjetas
 
@@ -181,7 +181,7 @@
 - [x] Mostrar estado de carpetas.
 - [x] Mostrar progreso de extraccion.
 - [x] Mostrar progreso de analisis.
-- [ ] Mostrar progreso de generacion de HTML.
+- [x] Mostrar progreso de generacion de HTML.
 - [ ] Mostrar progreso de generacion de tarjetas.
 - [ ] Mostrar progreso de generacion de PDFs.
 
@@ -192,7 +192,7 @@
 - [x] Boton `Analizar y clasificar coleccion maestra`.
 - [ ] Boton `Generar album-fuentes-espanol`.
 - [ ] Boton `Generar album-fuentes-tecnicas`.
-- [ ] Boton `Generar indices HTML`.
+- [x] Boton `Generar indices HTML`.
 - [ ] Boton `Generar tarjetas`.
 - [ ] Boton `Generar PDFs`.
 
@@ -227,7 +227,7 @@
 
 ### Modulo de generacion HTML
 
-- [ ] Generar albumes HTML reutilizando la logica existente.
+- [x] Generar albumes HTML reutilizando la logica existente.
 
 ### Modulo de tarjetas
 
@@ -270,7 +270,7 @@
 
 ### Fase 4
 
-- [ ] Implementar generacion de HTML desde la GUI.
+- [x] Implementar generacion de HTML desde la GUI.
 - [ ] Implementar generacion de tarjetas desde la GUI.
 
 ### Fase 5

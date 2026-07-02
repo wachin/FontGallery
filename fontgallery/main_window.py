@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
 
 from .services.analysis import AnalysisService
 from .services.extraction import ExtractionService
+from .services.html_generation import HtmlGenerationService
 from .services.workspace import WorkspaceService
 
 
@@ -27,6 +28,7 @@ class MainWindow(QMainWindow):
         self.workspace = workspace
         self.extraction_service = ExtractionService(workspace)
         self.analysis_service = AnalysisService(workspace)
+        self.html_generation_service = HtmlGenerationService(workspace)
         self.path_labels: dict[str, QLabel] = {}
         self.exists_labels: dict[str, QLabel] = {}
         self.package_count_label = QLabel()
@@ -105,6 +107,10 @@ class MainWindow(QMainWindow):
         analyze_button = QPushButton("Analizar y clasificar colección maestra")
         analyze_button.clicked.connect(self.on_analyze_main_collection)
         layout.addWidget(analyze_button)
+
+        html_button = QPushButton("Generar indices HTML")
+        html_button.clicked.connect(self.on_generate_html_indexes)
+        layout.addWidget(html_button)
 
         refresh_button = QPushButton("Actualizar estado")
         refresh_button.clicked.connect(self.refresh_status)
@@ -226,6 +232,42 @@ class MainWindow(QMainWindow):
                 f"Fuentes técnicas: {summary.technical_fonts}\n"
                 f"Copiadas a album-fuentes-espanol: {summary.copied_to_spanish}\n"
                 f"Copiadas a album-fuentes-tecnicas: {summary.copied_to_technical}"
+            ),
+        )
+
+    def on_generate_html_indexes(self) -> None:
+        try:
+            summaries = self.html_generation_service.generate_all_albums(log=self._log)
+        except FileNotFoundError as exc:
+            QMessageBox.warning(self, "Missing extracted fonts", str(exc))
+            self._log(f"WARNING: {exc}")
+            return
+        except subprocess.CalledProcessError as exc:
+            QMessageBox.critical(self, "Error", f"An external tool failed:\n{exc}")
+            self._log(f"ERROR: {exc}")
+            return
+        except OSError as exc:
+            QMessageBox.critical(self, "Error", f"Could not generate HTML indexes:\n{exc}")
+            self._log(f"ERROR: {exc}")
+            return
+
+        for summary in summaries:
+            self._log(
+                f"HTML album '{summary.label}': included={summary.included_fonts}, "
+                f"excluded={summary.excluded_fonts}, path={summary.html_path}"
+            )
+            if summary.excluded_report is not None:
+                self._log(f"Exclusion report: {summary.excluded_report}")
+
+        QMessageBox.information(
+            self,
+            "HTML generation completed",
+            (
+                "The HTML font albums were generated successfully.\n\n"
+                + "\n".join(
+                    f"{summary.label}: {summary.included_fonts} fonts"
+                    for summary in summaries
+                )
             ),
         )
 
