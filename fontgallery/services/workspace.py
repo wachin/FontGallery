@@ -29,6 +29,34 @@ class WorkspaceService:
             ManagedPath("album_tech", "Album técnico", root / "album-fuentes-tecnicas"),
         ]
 
+    @property
+    def packages_dir(self) -> Path:
+        return self._project_root / "paquetes-deb"
+
+    @property
+    def album_main_dir(self) -> Path:
+        return self._project_root / "album-fuentes"
+
+    @property
+    def album_es_dir(self) -> Path:
+        return self._project_root / "album-fuentes-espanol"
+
+    @property
+    def album_tech_dir(self) -> Path:
+        return self._project_root / "album-fuentes-tecnicas"
+
+    @property
+    def album_main_extract_dir(self) -> Path:
+        return self.album_main_dir / "fuentes-extraidas"
+
+    @property
+    def album_es_extract_dir(self) -> Path:
+        return self.album_es_dir / "fuentes-extraidas"
+
+    @property
+    def album_tech_extract_dir(self) -> Path:
+        return self.album_tech_dir / "fuentes-extraidas"
+
     def path_status(self) -> list[dict[str, str | bool]]:
         statuses: list[dict[str, str | bool]] = []
         for item in self.managed_paths:
@@ -52,7 +80,6 @@ class WorkspaceService:
         return created
 
     def deb_package_count(self) -> int:
-        packages_dir = self._project_root / "paquetes-deb"
-        if not packages_dir.exists():
+        if not self.packages_dir.exists():
             return 0
-        return sum(1 for path in packages_dir.iterdir() if path.is_file() and path.suffix == ".deb")
+        return sum(1 for path in self.packages_dir.iterdir() if path.is_file() and path.suffix == ".deb")

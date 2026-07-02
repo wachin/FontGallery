@@ -10,7 +10,7 @@
 ## Principio central
 
 - [ ] Usar `album-fuentes` como **coleccion maestra**.
-- [ ] Extraer primero todas las fuentes desde `paquetes-deb` hacia `album-fuentes/fuentes-extraidas`.
+- [x] Extraer primero todas las fuentes desde `paquetes-deb` hacia `album-fuentes/fuentes-extraidas`.
 - [ ] Analizar esa coleccion maestra una sola vez.
 - [ ] Derivar desde esa coleccion maestra otros albumes tematicos sin volver a extraer los `.deb`.
 
@@ -25,7 +25,7 @@
 
 ### Subcarpetas de fuentes extraidas
 
-- [ ] Crear `/album-fuentes/fuentes-extraidas` si no existe.
+- [x] Crear `/album-fuentes/fuentes-extraidas` si no existe.
 - [ ] Crear `/album-fuentes-espanol/fuentes-extraidas` si no existe.
 - [ ] Crear `/album-fuentes-tecnicas/fuentes-extraidas` si no existe.
 
@@ -45,19 +45,19 @@
 
 ### Paso 2. Extraer todas las fuentes a la coleccion maestra
 
-- [ ] Leer paquetes `.deb` desde `paquetes-deb`.
-- [ ] Detectar cuales paquetes contienen fuentes.
-- [ ] Extraer fuentes unicas hacia `album-fuentes/fuentes-extraidas`.
-- [ ] Evitar duplicados por hash.
-- [ ] Registrar fuentes que no puedan abrirse o copiarse.
+- [x] Leer paquetes `.deb` desde `paquetes-deb`.
+- [x] Detectar cuales paquetes contienen fuentes.
+- [x] Extraer fuentes unicas hacia `album-fuentes/fuentes-extraidas`.
+- [x] Evitar duplicados por hash.
+- [x] Registrar fuentes que no puedan abrirse o copiarse.
 
 ### Paso 3. Analizar la coleccion maestra
 
-- [ ] Leer metadata de todas las fuentes extraidas.
-- [ ] Obtener familia, estilo, nombre completo y nombre de archivo.
-- [ ] Detectar cobertura Unicode.
-- [ ] Detectar si la fuente soporta correctamente español.
-- [ ] Detectar si la fuente es tecnica o matematica.
+- [x] Leer metadata de todas las fuentes extraidas.
+- [x] Obtener familia, estilo, nombre completo y nombre de archivo.
+- [x] Detectar cobertura Unicode.
+- [x] Detectar si la fuente soporta correctamente español.
+- [x] Detectar si la fuente es tecnica o matematica.
 - [ ] Detectar otras categorias utiles para diseñadores.
 
 ### Paso 4. Derivar subalbumes desde `album-fuentes`
@@ -179,8 +179,8 @@
 - [x] Mostrar carpeta base de trabajo.
 - [x] Mostrar cantidad de paquetes `.deb` detectados.
 - [x] Mostrar estado de carpetas.
-- [ ] Mostrar progreso de extraccion.
-- [ ] Mostrar progreso de analisis.
+- [x] Mostrar progreso de extraccion.
+- [x] Mostrar progreso de analisis.
 - [ ] Mostrar progreso de generacion de HTML.
 - [ ] Mostrar progreso de generacion de tarjetas.
 - [ ] Mostrar progreso de generacion de PDFs.
@@ -188,8 +188,8 @@
 ### Botones minimos
 
 - [x] Boton `Preparar estructura`.
-- [ ] Boton `Extraer todas las fuentes a album-fuentes`.
-- [ ] Boton `Analizar y clasificar coleccion maestra`.
+- [x] Boton `Extraer todas las fuentes a album-fuentes`.
+- [x] Boton `Analizar y clasificar coleccion maestra`.
 - [ ] Boton `Generar album-fuentes-espanol`.
 - [ ] Boton `Generar album-fuentes-tecnicas`.
 - [ ] Boton `Generar indices HTML`.
@@ -214,15 +214,15 @@
 
 ### Modulo de paquetes `.deb`
 
-- [ ] Detectar paquetes.
-- [ ] Extraer con `dpkg-deb -x`.
-- [ ] Determinar si contienen fuentes.
+- [x] Detectar paquetes.
+- [x] Extraer con `dpkg-deb -x`.
+- [x] Determinar si contienen fuentes.
 
 ### Modulo de analisis tipografico
 
-- [ ] Leer metadata de las fuentes.
-- [ ] Detectar cobertura para español.
-- [ ] Detectar fuentes tecnicas.
+- [x] Leer metadata de las fuentes.
+- [x] Detectar cobertura para español.
+- [x] Detectar fuentes tecnicas.
 - [ ] Detectar filtros utiles para diseñadores.
 
 ### Modulo de generacion HTML
@@ -260,13 +260,13 @@
 
 ### Fase 2
 
-- [ ] Implementar extraccion total hacia `album-fuentes`.
-- [ ] Implementar registro de errores y duplicados.
+- [x] Implementar extraccion total hacia `album-fuentes`.
+- [x] Implementar registro de errores y duplicados.
 
 ### Fase 3
 
-- [ ] Implementar analisis de la coleccion maestra.
-- [ ] Implementar derivacion a español y tecnicas.
+- [x] Implementar analisis de la coleccion maestra.
+- [x] Implementar derivacion a español y tecnicas.
 
 ### Fase 4
 
