@@ -2,7 +2,7 @@
 
 ## Vision
 
-- [ ] Crear una aplicacion en `PyQt6` para GNU/Linux orientada a **Diseño Grafico**.
+- [x] Crear una aplicacion en `PyQt6` para GNU/Linux orientada a **Diseño Grafico**.
 - [ ] Ayudar a personas nuevas en Linux a descubrir visualmente las fuentes disponibles en los repositorios.
 - [ ] Tomar como base la coleccion de fuentes reunida por Ubuntu Studio y otras fuentes descargadas desde repositorios.
 - [ ] Separar claramente las fuentes utiles para diseño grafico general de las fuentes tecnicas o matematicas.
@@ -18,10 +18,10 @@
 
 ### Carpetas base
 
-- [ ] Crear `/paquetes-deb` si no existe.
-- [ ] Crear `/album-fuentes` si no existe.
-- [ ] Crear `/album-fuentes-espanol` si no existe.
-- [ ] Crear `/album-fuentes-tecnicas` si no existe.
+- [x] Crear `/paquetes-deb` si no existe.
+- [x] Crear `/album-fuentes` si no existe.
+- [x] Crear `/album-fuentes-espanol` si no existe.
+- [x] Crear `/album-fuentes-tecnicas` si no existe.
 
 ### Subcarpetas de fuentes extraidas
 
@@ -39,7 +39,7 @@
 
 ### Paso 1. Preparar estructura
 
-- [ ] Boton para preparar la estructura de carpetas.
+- [x] Boton para preparar la estructura de carpetas.
 - [ ] Verificar permisos de escritura.
 - [ ] Mostrar mensajes claros si alguna carpeta no puede crearse.
 
@@ -176,9 +176,9 @@
 
 ### Ventana principal
 
-- [ ] Mostrar carpeta base de trabajo.
-- [ ] Mostrar cantidad de paquetes `.deb` detectados.
-- [ ] Mostrar estado de carpetas.
+- [x] Mostrar carpeta base de trabajo.
+- [x] Mostrar cantidad de paquetes `.deb` detectados.
+- [x] Mostrar estado de carpetas.
 - [ ] Mostrar progreso de extraccion.
 - [ ] Mostrar progreso de analisis.
 - [ ] Mostrar progreso de generacion de HTML.
@@ -187,7 +187,7 @@
 
 ### Botones minimos
 
-- [ ] Boton `Preparar estructura`.
+- [x] Boton `Preparar estructura`.
 - [ ] Boton `Extraer todas las fuentes a album-fuentes`.
 - [ ] Boton `Analizar y clasificar coleccion maestra`.
 - [ ] Boton `Generar album-fuentes-espanol`.
@@ -208,7 +208,7 @@
 
 ### Modulo de filesystem
 
-- [ ] Crear y validar carpetas.
+- [x] Crear y validar carpetas.
 - [ ] Comprobar permisos.
 - [ ] Limpiar o reutilizar salidas.
 
@@ -254,9 +254,9 @@
 
 ### Fase 1
 
-- [ ] Crear esqueleto del proyecto PyQt6.
-- [ ] Crear ventana principal minima.
-- [ ] Implementar `Preparar estructura`.
+- [x] Crear esqueleto del proyecto PyQt6.
+- [x] Crear ventana principal minima.
+- [x] Implementar `Preparar estructura`.
 
 ### Fase 2
 

@@ -1,0 +1,1 @@
+"""FontGallery application package."""
