@@ -57,12 +57,14 @@ Tests live in `tests/`.
 Run them with:
 
 ```bash
-pytest
+env QT_QPA_PLATFORM=offscreen pytest -q
 ```
 
 The current tests cover:
 
 - workspace folder naming for English and Spanish;
+- creation of the derived extracted-font folders;
+- workspace write-access validation;
 - reuse of an existing localized workspace;
 - loading of Qt translations;
 - translation of UI and service strings.

@@ -69,6 +69,8 @@ It also exposes derived paths used by the services:
 - `album-fuentes-espanol/fuentes-extraidas`
 - `album-fuentes-tecnicas/fuentes-extraidas`
 
+The prepare step now also creates those derived extracted-font folders up front and validates write access before attempting to create missing directories.
+
 ### 2. Extract fonts from `.deb` packages
 
 `ExtractionService` implements extraction into the master collection:
@@ -216,7 +218,6 @@ Repository reference files available for package review:
 
 ## Current limitations
 
-- real write-permission checks are not implemented yet;
 - PNG card generation is not implemented in the GUI yet;
 - PDF generation is not implemented in the GUI yet;
 - HTML generation currently depends on the extracted directories already being present;

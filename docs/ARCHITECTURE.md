@@ -64,7 +64,8 @@ Responsibilities:
 - define the managed folder structure;
 - expose canonical project paths;
 - create missing base directories;
-- report basic directory status.
+- create required derived extracted-font directories;
+- report directory existence and write-access status.
 
 Current managed roots:
 
@@ -83,7 +84,7 @@ Future expansion:
 
 - card directories;
 - PDF output paths;
-- stronger write-permission validation.
+- cleanup/reuse policies for generated outputs.
 
 HTML output paths are now modeled in the workspace service.
 

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
+
+from PyQt6.QtCore import QCoreApplication
 
 
 @dataclass(frozen=True)
@@ -86,6 +89,15 @@ class WorkspaceService:
         ]
 
     @property
+    def required_directories(self) -> list[ManagedPath]:
+        return [
+            *self.managed_paths,
+            ManagedPath("album_main_extract", "Main extracted fonts", self.album_main_extract_dir),
+            ManagedPath("album_es_extract", "Spanish extracted fonts", self.album_es_extract_dir),
+            ManagedPath("album_tech_extract", "Technical extracted fonts", self.album_tech_extract_dir),
+        ]
+
+    @property
     def packages_dir(self) -> Path:
         return self._paths["packages"]
 
@@ -164,14 +176,15 @@ class WorkspaceService:
                     "label": item.label,
                     "path": str(item.path),
                     "exists": item.path.exists(),
-                    "writable": item.path.exists() and item.path.is_dir() and item.path.stat() is not None,
+                    "writable": self._is_writable_target(item.path),
                 }
             )
         return statuses
 
     def prepare_structure(self) -> list[Path]:
         created: list[Path] = []
-        for item in self.managed_paths:
+        for item in self.required_directories:
+            self._ensure_writable(item.path)
             if not item.path.exists():
                 item.path.mkdir(parents=True, exist_ok=True)
                 created.append(item.path)
@@ -246,3 +259,44 @@ class WorkspaceService:
             if album_dir.name == dirname:
                 return scheme
         return self._preferred_scheme
+
+    def _is_writable_target(self, path: Path) -> bool:
+        candidate = path if path.exists() else self._nearest_existing_parent(path)
+        if candidate is None or not candidate.is_dir():
+            return False
+        return os.access(candidate, os.W_OK | os.X_OK)
+
+    def _nearest_existing_parent(self, path: Path) -> Path | None:
+        current = path
+        while not current.exists():
+            if current == current.parent:
+                return None
+            current = current.parent
+        return current
+
+    def _ensure_writable(self, path: Path) -> None:
+        if path.exists():
+            if not path.is_dir():
+                raise OSError(
+                    QCoreApplication.translate(
+                        "WorkspaceService",
+                        "Expected a directory but found a file: {path}",
+                    ).format(path=path)
+                )
+            if not self._is_writable_target(path):
+                raise PermissionError(
+                    QCoreApplication.translate(
+                        "WorkspaceService",
+                        "Directory is not writable: {path}",
+                    ).format(path=path)
+                )
+            return
+
+        parent = self._nearest_existing_parent(path.parent)
+        if parent is None or not parent.is_dir() or not self._is_writable_target(parent):
+            raise PermissionError(
+                QCoreApplication.translate(
+                    "WorkspaceService",
+                    "Cannot create directory '{path}' because its parent is not writable: {parent}",
+                ).format(path=path, parent=parent or path.parent)
+            )

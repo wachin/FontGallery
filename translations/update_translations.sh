@@ -6,6 +6,7 @@ cd "$ROOT_DIR"
 
 pylupdate6 \
   fontgallery/main_window.py \
+  fontgallery/services/workspace.py \
   fontgallery/services/extraction.py \
   fontgallery/services/analysis.py \
   fontgallery/services/html_generation.py \

@@ -26,8 +26,8 @@
 ### Extracted font subfolders
 
 - [x] Create `/album-fuentes/fuentes-extraidas` if it does not exist.
-- [ ] Create `/album-fuentes-espanol/fuentes-extraidas` if it does not exist.
-- [ ] Create `/album-fuentes-tecnicas/fuentes-extraidas` if it does not exist.
+- [x] Create `/album-fuentes-espanol/fuentes-extraidas` if it does not exist.
+- [x] Create `/album-fuentes-tecnicas/fuentes-extraidas` if it does not exist.
 
 ### Card subfolders
 
@@ -40,8 +40,8 @@
 ### Step 1. Prepare the structure
 
 - [x] Button to prepare the folder structure.
-- [ ] Verify write permissions.
-- [ ] Show clear messages if a folder cannot be created.
+- [x] Verify write permissions.
+- [x] Show clear messages if a folder cannot be created.
 
 ### Step 2. Extract all fonts into the master collection
 
@@ -209,7 +209,7 @@
 ### Filesystem module
 
 - [x] Create and validate folders.
-- [ ] Check permissions.
+- [x] Check permissions.
 - [ ] Clean or reuse outputs.
 
 ### `.deb` package module

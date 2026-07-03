@@ -31,6 +31,7 @@ class MainWindow(QMainWindow):
         self.html_generation_service = HtmlGenerationService(workspace)
         self.path_labels: dict[str, QLabel] = {}
         self.exists_labels: dict[str, QLabel] = {}
+        self.write_labels: dict[str, QLabel] = {}
         self.package_count_label = QLabel()
         self.log_output = QTextEdit()
         self._init_texts()
@@ -53,6 +54,7 @@ class MainWindow(QMainWindow):
         self.column_item_text = self.tr("Item")
         self.column_path_text = self.tr("Path")
         self.column_status_text = self.tr("Status")
+        self.column_write_text = self.tr("Write access")
         self.path_labels_text = {
             "packages": self.tr("Packages"),
             "album_main": self.tr("Main album"),
@@ -71,6 +73,8 @@ class MainWindow(QMainWindow):
         self.refresh_button_text = self.tr("Refresh status")
         self.exists_text = self.tr("Exists")
         self.missing_text = self.tr("Missing")
+        self.writable_text = self.tr("Writable")
+        self.not_writable_text = self.tr("Not writable")
         self.package_count_text = self.tr("Detected .deb packages in '{folder}': {count}")
         self.error_title_text = self.tr("Error")
         self.warning_title_text = self.tr("Warning")
@@ -158,17 +162,21 @@ class MainWindow(QMainWindow):
         grid.addWidget(QLabel(self.column_item_text), 0, 0)
         grid.addWidget(QLabel(self.column_path_text), 0, 1)
         grid.addWidget(QLabel(self.column_status_text), 0, 2)
+        grid.addWidget(QLabel(self.column_write_text), 0, 3)
 
         for row, item in enumerate(self.workspace.managed_paths, start=1):
             label = QLabel(self.path_labels_text.get(item.key, item.label))
             path_label = QLabel(str(item.path))
             path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
             state_label = QLabel()
+            write_label = QLabel()
             self.path_labels[item.key] = path_label
             self.exists_labels[item.key] = state_label
+            self.write_labels[item.key] = write_label
             grid.addWidget(label, row, 0)
             grid.addWidget(path_label, row, 1)
             grid.addWidget(state_label, row, 2)
+            grid.addWidget(write_label, row, 3)
 
         layout.addLayout(grid)
         return box
@@ -219,6 +227,15 @@ class MainWindow(QMainWindow):
             else:
                 state_label.setText(self.missing_text)
                 state_label.setStyleSheet("color: #a33; font-weight: 600;")
+
+            writable = bool(item["writable"])
+            write_label = self.write_labels[key]
+            if writable:
+                write_label.setText(self.writable_text)
+                write_label.setStyleSheet("color: #0a7f2e; font-weight: 600;")
+            else:
+                write_label.setText(self.not_writable_text)
+                write_label.setStyleSheet("color: #a33; font-weight: 600;")
 
         self.package_count_label.setText(
             self.package_count_text.format(
