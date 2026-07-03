@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bgGradient" x1="72" y1="56" x2="440" y2="456" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14324c"/>
+      <stop offset="0.52" stop-color="#1d5f78"/>
+      <stop offset="1" stop-color="#2b9d89"/>
+    </linearGradient>
+    <linearGradient id="panelGradient" x1="112" y1="112" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="cardBackGradient" x1="146" y1="108" x2="314" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f5f8fc"/>
+      <stop offset="1" stop-color="#d7e0eb"/>
+    </linearGradient>
+    <linearGradient id="cardMidGradient" x1="188" y1="118" x2="386" y2="296" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e7eef5"/>
+    </linearGradient>
+    <linearGradient id="cardFrontGradient" x1="146" y1="150" x2="360" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#efe1bf"/>
+    </linearGradient>
+    <linearGradient id="boxTopGradient" x1="124" y1="266" x2="392" y2="338" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e2ac44"/>
+      <stop offset="1" stop-color="#b77022"/>
+    </linearGradient>
+    <linearGradient id="boxFrontGradient" x1="138" y1="318" x2="376" y2="428" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d28a33"/>
+      <stop offset="1" stop-color="#8d4f1a"/>
+    </linearGradient>
+    <linearGradient id="boxSideGradient" x1="300" y1="298" x2="406" y2="392" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bd7324"/>
+      <stop offset="1" stop-color="#6f3f17"/>
+    </linearGradient>
+    <linearGradient id="glyphGradient" x1="190" y1="168" x2="316" y2="318" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#205879"/>
+      <stop offset="1" stop-color="#123248"/>
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="252" y1="126" x2="290" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38c6bb"/>
+      <stop offset="1" stop-color="#179184"/>
+    </linearGradient>
+    <radialGradient id="glowGradient" cx="0.5" cy="0.34" r="0.66">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <g>
+    <rect x="56" y="56" width="400" height="400" rx="92" ry="92" fill="url(#bgGradient)"/>
+    <rect x="76" y="76" width="360" height="360" rx="74" ry="74" fill="url(#panelGradient)"/>
+    <ellipse cx="256" cy="164" rx="138" ry="96" fill="url(#glowGradient)"/>
+  </g>
+  <g>
+    <path d="M145 137H277C290 137 303 142 313 151L336 172C346 181 352 194 352 208V260C352 277 338 291 321 291H145C128 291 114 277 114 260V168C114 151 128 137 145 137Z" fill="url(#cardBackGradient)"/>
+    <path d="M197 128H329C342 128 354 133 364 142L389 165C398 174 404 187 404 201V255C404 272 390 286 373 286H197C180 286 166 272 166 255V159C166 142 180 128 197 128Z" fill="url(#cardMidGradient)"/>
+    <path d="M146 162H322C335 162 348 167 357 176L382 199C391 208 396 220 396 233V329C396 346 382 360 365 360H146C129 360 115 346 115 329V193C115 176 129 162 146 162Z" fill="url(#cardFrontGradient)"/>
+    <path d="M146 162H322C335 162 348 167 357 176L382 199C391 208 396 220 396 233V250H115V193C115 176 129 162 146 162Z" fill="#ffffff" opacity="0.30"/>
+  </g>
+  <g>
+    <path d="M233 183H278L327 320H291L280 290H211L199 320H163ZM245 214L223 264H268L247 214Z" fill="url(#glyphGradient)"/>
+    <path d="M258 136L293 136L275 164H246Z" fill="url(#accentGradient)"/>
+    <rect x="157" y="204" width="30" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.52"/>
+    <rect x="146" y="224" width="48" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.44"/>
+    <rect x="148" y="283" width="58" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.40"/>
+    <rect x="148" y="303" width="72" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.34"/>
+  </g>
+  <g>
+    <path d="M137 287L255 312L375 287L406 314L255 350L106 314Z" fill="url(#boxTopGradient)"/>
+    <path d="M106 314L255 350V412L106 374Z" fill="url(#boxFrontGradient)"/>
+    <path d="M255 350L406 314V374L255 412Z" fill="url(#boxSideGradient)"/>
+    <path d="M184 298L255 312L327 298L255 280Z" fill="#f0c36d" opacity="0.66"/>
+    <path d="M164 320L216 333V367L164 354Z" fill="#f8d79a" opacity="0.18"/>
+    <path d="M328 326L373 315V349L328 361Z" fill="#fff2cf" opacity="0.12"/>
+  </g>
+  <g>
+    <path d="M126 269L145 162L205 162L181 287Z" fill="#fff5d7" opacity="0.55"/>
+    <path d="M334 162L387 206L387 317L362 305L357 176Z" fill="#fff5d7" opacity="0.34"/>
+  </g>
+  <g>
+    <ellipse cx="256" cy="421" rx="132" ry="18" fill="#0b2132" opacity="0.22"/>
+  </g>
+</svg>
