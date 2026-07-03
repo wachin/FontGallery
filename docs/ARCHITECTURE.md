@@ -47,6 +47,7 @@ Responsibilities:
 - present workspace state to the user;
 - show operational logs;
 - call services and present success or error dialogs.
+- keep UI strings ready for translation with Qt's translation system.
 
 Current design rule:
 
@@ -213,6 +214,8 @@ The current architecture already depends on:
 - `PyQt6`
 - `dpkg-deb`
 - `fc-scan`
+- `pylupdate6`
+- `lrelease`
 
 Likely future dependencies:
 

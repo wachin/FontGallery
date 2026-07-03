@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from PyQt6.QtCore import QCoreApplication
+
 from .analysis import TECHNICAL_KEYWORDS
 from .workspace import WorkspaceService
 
@@ -106,10 +108,11 @@ class HtmlGenerationService:
             output_dir=output_dir,
             include_technical=False,
         )
-        title = "Album of extracted fonts from .deb packages"
-        intro = (
+        title = QCoreApplication.translate("HtmlGenerationService", "Album of extracted fonts from .deb packages")
+        intro = QCoreApplication.translate(
+            "HtmlGenerationService",
             "Generated from locally extracted font packages and intended for general graphic design browsing. "
-            "Technical and math-oriented fonts are excluded from this main album."
+            "Technical and math-oriented fonts are excluded from this main album.",
         )
         self._write_html(
             entries=entries,
@@ -120,7 +123,7 @@ class HtmlGenerationService:
         )
 
         excluded_lines = [
-            "Technical fonts excluded from the main design album:",
+            QCoreApplication.translate("HtmlGenerationService", "Technical fonts excluded from the main design album:"),
             "",
         ]
         excluded_lines.extend(
@@ -128,7 +131,12 @@ class HtmlGenerationService:
             for family, fullname, style, package, filename, reason in excluded
         )
         excluded_path.write_text("\n".join(excluded_lines), encoding="utf-8")
-        emit(f"Generated main HTML album: {html_path}")
+        emit(
+            QCoreApplication.translate(
+                "HtmlGenerationService",
+                "Generated main HTML album: {path}",
+            ).format(path=html_path)
+        )
         return HtmlAlbumSummary(
             label="main",
             html_path=html_path,
@@ -147,10 +155,11 @@ class HtmlGenerationService:
             output_dir=output_dir,
             include_technical=True,
         )
-        title = "Album of fonts with Spanish support"
-        intro = (
+        title = QCoreApplication.translate("HtmlGenerationService", "Album of fonts with Spanish support")
+        intro = QCoreApplication.translate(
+            "HtmlGenerationService",
             "Generated from the derived Spanish-support subset. "
-            "These fonts are intended to cover accented Spanish characters and related glyphs."
+            "These fonts are intended to cover accented Spanish characters and related glyphs.",
         )
         self._write_html(
             entries=entries,
@@ -159,7 +168,12 @@ class HtmlGenerationService:
             intro=intro,
             sample_text=DEFAULT_SAMPLE_TEXT,
         )
-        emit(f"Generated Spanish HTML album: {html_path}")
+        emit(
+            QCoreApplication.translate(
+                "HtmlGenerationService",
+                "Generated Spanish HTML album: {path}",
+            ).format(path=html_path)
+        )
         return HtmlAlbumSummary(
             label="spanish",
             html_path=html_path,
@@ -177,10 +191,11 @@ class HtmlGenerationService:
             output_dir=output_dir,
             include_technical=True,
         )
-        title = "Album of technical and mathematical fonts"
-        intro = (
+        title = QCoreApplication.translate("HtmlGenerationService", "Album of technical and mathematical fonts")
+        intro = QCoreApplication.translate(
+            "HtmlGenerationService",
             "Generated for technical, mathematical, symbolic, or TeX-oriented fonts separated from the main "
-            "design-focused album."
+            "design-focused album.",
         )
         self._write_html(
             entries=entries,
@@ -189,7 +204,12 @@ class HtmlGenerationService:
             intro=intro,
             sample_text=TECHNICAL_SAMPLE_TEXT,
         )
-        emit(f"Generated technical HTML album: {html_path}")
+        emit(
+            QCoreApplication.translate(
+                "HtmlGenerationService",
+                "Generated technical HTML album: {path}",
+            ).format(path=html_path)
+        )
         return HtmlAlbumSummary(
             label="technical",
             html_path=html_path,
@@ -204,14 +224,24 @@ class HtmlGenerationService:
         include_technical: bool,
     ) -> tuple[list[HtmlFontEntry], list[tuple[str, str, str, str, str, str]]]:
         if not source_dir.exists():
-            raise FileNotFoundError(f"Missing extracted-font directory: {source_dir}")
+            raise FileNotFoundError(
+                QCoreApplication.translate(
+                    "HtmlGenerationService",
+                    "Missing extracted-font directory: {path}",
+                ).format(path=source_dir)
+            )
 
         font_paths = sorted(
             path for path in source_dir.rglob("*")
             if path.is_file() and path.suffix.lower() in FONT_SUFFIXES
         )
         if not font_paths:
-            raise FileNotFoundError(f"No extracted fonts were found in: {source_dir}")
+            raise FileNotFoundError(
+                QCoreApplication.translate(
+                    "HtmlGenerationService",
+                    "No extracted fonts were found in: {path}",
+                ).format(path=source_dir)
+            )
 
         entries: list[HtmlFontEntry] = []
         excluded: list[tuple[str, str, str, str, str, str]] = []
@@ -234,7 +264,10 @@ class HtmlGenerationService:
                         style,
                         package,
                         font_path.name,
-                        "Classified as technical or mathematical",
+                        QCoreApplication.translate(
+                            "HtmlGenerationService",
+                            "Classified as technical or mathematical",
+                        ),
                     )
                 )
                 continue
@@ -319,7 +352,7 @@ class HtmlGenerationService:
         style_block = "\n".join(font_faces)
         body_block = "\n".join(sections)
         return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="{html.escape(self.workspace.language)}">
 <head>
   <meta charset="utf-8">
   <title>{html.escape(title)}</title>

@@ -45,6 +45,13 @@ It also shows:
 - `fontgallery/services/analysis.py`
 - `fontgallery/services/html_generation.py`
 
+### Translation assets
+
+- `translations/fontgallery_en.ts`
+- `translations/fontgallery_es.ts`
+- `translations/fontgallery_en.qm`
+- `translations/fontgallery_es.qm`
+
 ## Implemented flow
 
 ### 1. Prepare structure
@@ -142,6 +149,21 @@ Current behavior:
 - excludes technical fonts from the main album;
 - writes an exclusion report for technical fonts removed from the main album.
 
+### 6. Load translations
+
+The application now uses English as its source UI language and prepares interface strings with `self.tr(...)` in the main window.
+
+At startup:
+
+- the system locale is detected with `QLocale.system().name()`;
+- the workspace naming scheme is resolved from that locale;
+- the application attempts to load a matching `.qm` file from `translations/`.
+
+At the moment, the supported UI languages are:
+
+- English
+- Spanish
+
 ## Current ROADMAP status
 
 These blocks are already implemented:
@@ -164,6 +186,34 @@ In addition to `PyQt6`, the current flow depends on these system tools:
 
 Without these tools, extraction and analysis will not work.
 
+### Debian 12 / MX Linux 23 packages
+
+For development and testing, the current recommended package set is:
+
+```bash
+sudo apt install \
+  python3-pyqt6 \
+  python3-pytest \
+  pyqt6-dev-tools \
+  qtchooser \
+  fontconfig \
+  dpkg
+```
+
+Purpose of each package:
+
+- `python3-pyqt6`: GUI runtime and Qt Python bindings.
+- `python3-pytest`: test runner for the local test suite.
+- `pyqt6-dev-tools`: provides `pylupdate6` for translation source updates.
+- `qtchooser`: provides `lrelease` in this environment for `.qm` generation.
+- `fontconfig`: provides `fc-scan`.
+- `dpkg`: provides `dpkg-deb`.
+
+Repository reference files available for package review:
+
+- `packages_available_debian12_pyqt6.txt`
+- `packages_available_debian12_python3.txt`
+
 ## Current limitations
 
 - real write-permission checks are not implemented yet;
@@ -175,6 +225,23 @@ Without these tools, extraction and analysis will not work.
 - the interface still runs everything on the main thread, so large jobs may freeze the window.
 
 ## How to test the implemented features
+
+### Automated tests
+
+The project now includes a `tests/` directory.
+
+Run the tests with:
+
+```bash
+pytest
+```
+
+Current coverage includes:
+
+- workspace naming in English and Spanish;
+- reuse of an existing localized workspace;
+- loading of Qt translations;
+- translation of UI and service strings.
 
 ### Run the application
 

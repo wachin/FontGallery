@@ -8,6 +8,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from PyQt6.QtCore import QCoreApplication
+
 from .workspace import WorkspaceService
 
 
@@ -92,7 +94,10 @@ class ExtractionService:
         font_packages = [path for path in packages if is_font_package(path)]
         if not font_packages:
             raise FileNotFoundError(
-                f"No se encontraron paquetes .deb de fuentes en: {self.workspace.packages_dir}"
+                QCoreApplication.translate(
+                    "ExtractionService",
+                    "No font .deb packages were found in: {path}",
+                ).format(path=self.workspace.packages_dir)
             )
 
         seen_hashes: set[str] = set()
@@ -104,7 +109,12 @@ class ExtractionService:
             pkg_name = package_base_name(package)
             pkg_out_dir = extract_dir / pkg_name
             pkg_out_dir.mkdir(parents=True, exist_ok=True)
-            emit(f"Procesando paquete: {pkg_name}")
+            emit(
+                QCoreApplication.translate(
+                    "ExtractionService",
+                    "Processing package: {package}",
+                ).format(package=pkg_name)
+            )
             with tempfile.TemporaryDirectory(prefix="fontgallery-deb-", dir="/tmp") as tmp_dir:
                 tmp_path = Path(tmp_dir)
                 run(["dpkg-deb", "-x", str(package), str(tmp_path)])
@@ -138,7 +148,12 @@ class ExtractionService:
                             path=dest_path,
                         )
                     )
-            emit(f"  Fuentes acumuladas: {len(extracted_fonts)}")
+            emit(
+                QCoreApplication.translate(
+                    "ExtractionService",
+                    "  Accumulated fonts: {count}",
+                ).format(count=len(extracted_fonts))
+            )
 
         extracted_fonts.sort(
             key=lambda item: (

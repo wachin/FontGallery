@@ -59,6 +59,11 @@ class MainWindow(QMainWindow):
             "album_es": self.tr("Spanish album"),
             "album_tech": self.tr("Technical album"),
         }
+        self.album_labels_text = {
+            "main": self.tr("Main album"),
+            "spanish": self.tr("Spanish album"),
+            "technical": self.tr("Technical album"),
+        }
         self.prepare_button_text = self.tr("Prepare workspace")
         self.extract_button_text = self.tr("Extract all fonts to the main album")
         self.analyze_button_text = self.tr("Analyze and classify the master collection")
@@ -331,9 +336,10 @@ class MainWindow(QMainWindow):
             return
 
         for summary in summaries:
+            label_text = self.album_labels_text.get(summary.label, summary.label)
             self._log(
                 self.html_summary_log_text.format(
-                    label=summary.label,
+                    label=label_text,
                     included=summary.included_fonts,
                     excluded=summary.excluded_fonts,
                     path=summary.html_path,
@@ -347,7 +353,7 @@ class MainWindow(QMainWindow):
             self.html_completed_title_text,
             self.html_completed_message_text.format(
                 details="\n".join(
-                    f"{summary.label}: {summary.included_fonts} fonts"
+                    f"{self.album_labels_text.get(summary.label, summary.label)}: {summary.included_fonts} fonts"
                     for summary in summaries
                 )
             ),

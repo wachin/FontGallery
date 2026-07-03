@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from PyQt6.QtCore import QCoreApplication
+
 from .workspace import WorkspaceService
 
 
@@ -130,11 +132,21 @@ class AnalysisService:
 
         source_dir = self.workspace.album_main_extract_dir
         if not source_dir.exists():
-            raise FileNotFoundError(f"No existe la coleccion maestra extraida en: {source_dir}")
+            raise FileNotFoundError(
+                QCoreApplication.translate(
+                    "AnalysisService",
+                    "The extracted master collection does not exist: {path}",
+                ).format(path=source_dir)
+            )
 
         font_paths = sorted(path for path in source_dir.rglob("*") if path.is_file())
         if not font_paths:
-            raise FileNotFoundError(f"No se encontraron fuentes extraidas en: {source_dir}")
+            raise FileNotFoundError(
+                QCoreApplication.translate(
+                    "AnalysisService",
+                    "No extracted fonts were found in: {path}",
+                ).format(path=source_dir)
+            )
 
         analyzed: list[AnalyzedFont] = []
         spanish_count = 0
@@ -173,13 +185,13 @@ class AnalysisService:
             [font for font in analyzed if font.supports_spanish and not font.is_technical],
             self.workspace.album_es_extract_dir,
             emit,
-            "album-fuentes-espanol",
+            self.workspace.album_es_dir.name,
         )
         copied_technical = self._copy_subset(
             [font for font in analyzed if font.is_technical],
             self.workspace.album_tech_extract_dir,
             emit,
-            "album-fuentes-tecnicas",
+            self.workspace.album_tech_dir.name,
         )
 
         summary = AnalysisSummary(
@@ -209,7 +221,12 @@ class AnalysisService:
             package_dir.mkdir(parents=True, exist_ok=True)
             shutil.copy2(font.path, package_dir / font.filename)
 
-        emit(f"Copiadas {len(fonts)} fuentes a {label}")
+        emit(
+            QCoreApplication.translate(
+                "AnalysisService",
+                "Copied {count} fonts to {label}",
+            ).format(count=len(fonts), label=label)
+        )
         return len(fonts)
 
     def _is_technical_font(
