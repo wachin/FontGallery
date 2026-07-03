@@ -2,136 +2,136 @@
 
 ## Vision
 
-- [x] Crear una aplicacion en `PyQt6` para GNU/Linux orientada a **Diseño Grafico**.
-- [ ] Ayudar a personas nuevas en Linux a descubrir visualmente las fuentes disponibles en los repositorios.
-- [ ] Tomar como base la coleccion de fuentes reunida por Ubuntu Studio y otras fuentes descargadas desde repositorios.
-- [ ] Separar claramente las fuentes utiles para diseño grafico general de las fuentes tecnicas o matematicas.
+- [x] Build a `PyQt6` application for GNU/Linux focused on **Graphic Design**.
+- [ ] Help people who are new to Linux visually discover the fonts available in the repositories.
+- [ ] Use the font collection gathered by Ubuntu Studio and other repository-downloaded fonts as a starting point.
+- [ ] Clearly separate fonts useful for general graphic design from technical or mathematical fonts.
 
-## Principio central
+## Core principle
 
-- [ ] Usar `album-fuentes` como **coleccion maestra**.
-- [x] Extraer primero todas las fuentes desde `paquetes-deb` hacia `album-fuentes/fuentes-extraidas`.
-- [ ] Analizar esa coleccion maestra una sola vez.
-- [ ] Derivar desde esa coleccion maestra otros albumes tematicos sin volver a extraer los `.deb`.
+- [ ] Use `album-fuentes` as the **master collection**.
+- [x] First extract all fonts from `paquetes-deb` into `album-fuentes/fuentes-extraidas`.
+- [ ] Analyze that master collection only once.
+- [ ] Derive other thematic albums from that master collection without extracting the `.deb` files again.
 
-## Estructura de carpetas
+## Folder structure
 
-### Carpetas base
+### Base folders
 
-- [x] Crear `/paquetes-deb` si no existe.
-- [x] Crear `/album-fuentes` si no existe.
-- [x] Crear `/album-fuentes-espanol` si no existe.
-- [x] Crear `/album-fuentes-tecnicas` si no existe.
+- [x] Create `/paquetes-deb` if it does not exist.
+- [x] Create `/album-fuentes` if it does not exist.
+- [x] Create `/album-fuentes-espanol` if it does not exist.
+- [x] Create `/album-fuentes-tecnicas` if it does not exist.
 
-### Subcarpetas de fuentes extraidas
+### Extracted font subfolders
 
-- [x] Crear `/album-fuentes/fuentes-extraidas` si no existe.
-- [ ] Crear `/album-fuentes-espanol/fuentes-extraidas` si no existe.
-- [ ] Crear `/album-fuentes-tecnicas/fuentes-extraidas` si no existe.
+- [x] Create `/album-fuentes/fuentes-extraidas` if it does not exist.
+- [ ] Create `/album-fuentes-espanol/fuentes-extraidas` if it does not exist.
+- [ ] Create `/album-fuentes-tecnicas/fuentes-extraidas` if it does not exist.
 
-### Subcarpetas de tarjetas
+### Card subfolders
 
-- [ ] Crear `/album-fuentes/tarjetas-fuentes` si no existe.
-- [ ] Crear `/album-fuentes-espanol/tarjetas-fuentes-espanol` si no existe.
-- [ ] Crear `/album-fuentes-tecnicas/tarjetas-fuentes-tecnicas` si no existe.
+- [ ] Create `/album-fuentes/tarjetas-fuentes` if it does not exist.
+- [ ] Create `/album-fuentes-espanol/tarjetas-fuentes-espanol` if it does not exist.
+- [ ] Create `/album-fuentes-tecnicas/tarjetas-fuentes-tecnicas` if it does not exist.
 
-## Flujo principal deseado
+## Desired main workflow
 
-### Paso 1. Preparar estructura
+### Step 1. Prepare the structure
 
-- [x] Boton para preparar la estructura de carpetas.
-- [ ] Verificar permisos de escritura.
-- [ ] Mostrar mensajes claros si alguna carpeta no puede crearse.
+- [x] Button to prepare the folder structure.
+- [ ] Verify write permissions.
+- [ ] Show clear messages if a folder cannot be created.
 
-### Paso 2. Extraer todas las fuentes a la coleccion maestra
+### Step 2. Extract all fonts into the master collection
 
-- [x] Leer paquetes `.deb` desde `paquetes-deb`.
-- [x] Detectar cuales paquetes contienen fuentes.
-- [x] Extraer fuentes unicas hacia `album-fuentes/fuentes-extraidas`.
-- [x] Evitar duplicados por hash.
-- [x] Registrar fuentes que no puedan abrirse o copiarse.
+- [x] Read `.deb` packages from `paquetes-deb`.
+- [x] Detect which packages contain fonts.
+- [x] Extract unique fonts into `album-fuentes/fuentes-extraidas`.
+- [x] Avoid duplicates by hash.
+- [x] Record fonts that cannot be opened or copied.
 
-### Paso 3. Analizar la coleccion maestra
+### Step 3. Analyze the master collection
 
-- [x] Leer metadata de todas las fuentes extraidas.
-- [x] Obtener familia, estilo, nombre completo y nombre de archivo.
-- [x] Detectar cobertura Unicode.
-- [x] Detectar si la fuente soporta correctamente español.
-- [x] Detectar si la fuente es tecnica o matematica.
-- [ ] Detectar otras categorias utiles para diseñadores.
+- [x] Read metadata from all extracted fonts.
+- [x] Obtain family, style, full name, and file name.
+- [x] Detect Unicode coverage.
+- [x] Detect whether the font properly supports Spanish.
+- [x] Detect whether the font is technical or mathematical.
+- [ ] Detect other categories useful for designers.
 
-### Paso 4. Derivar subalbumes desde `album-fuentes`
+### Step 4. Derive sub-albums from `album-fuentes`
 
-- [ ] Crear `album-fuentes-espanol` a partir de `album-fuentes`.
-- [ ] Crear `album-fuentes-tecnicas` a partir de `album-fuentes`.
-- [ ] Crear reportes de exclusiones y clasificacion.
+- [ ] Create `album-fuentes-espanol` from `album-fuentes`.
+- [ ] Create `album-fuentes-tecnicas` from `album-fuentes`.
+- [ ] Create exclusion and classification reports.
 
-### Paso 5. Generar indices HTML
+### Step 5. Generate HTML indexes
 
-- [x] Crear `album-fuentes/album-fuentes.html`.
-- [x] Crear `album-fuentes-espanol/album-fuentes-espanol.html`.
-- [x] Crear `album-fuentes-tecnicas/album-fuentes-tecnicas.html`.
+- [x] Create `album-fuentes/album-fuentes.html`.
+- [x] Create `album-fuentes-espanol/album-fuentes-espanol.html`.
+- [x] Create `album-fuentes-tecnicas/album-fuentes-tecnicas.html`.
 
-### Paso 6. Generar tarjetas
+### Step 6. Generate cards
 
-- [ ] Generar tarjetas PNG para `album-fuentes`.
-- [ ] Generar tarjetas PNG para `album-fuentes-espanol`.
-- [ ] Generar tarjetas PNG para `album-fuentes-tecnicas`.
+- [ ] Generate PNG cards for `album-fuentes`.
+- [ ] Generate PNG cards for `album-fuentes-espanol`.
+- [ ] Generate PNG cards for `album-fuentes-tecnicas`.
 
-### Paso 7. Generar PDFs
+### Step 7. Generate PDFs
 
-- [ ] Generar PDF para `album-fuentes`.
-- [ ] Generar PDF para `album-fuentes-espanol`.
-- [ ] Generar PDF para `album-fuentes-tecnicas`.
+- [ ] Generate PDF for `album-fuentes`.
+- [ ] Generate PDF for `album-fuentes-espanol`.
+- [ ] Generate PDF for `album-fuentes-tecnicas`.
 
-## Albumes base del proyecto
+## Base albums of the project
 
-### Album principal
+### Main album
 
-- [ ] Mantener `album-fuentes` como catalogo principal de diseño grafico general.
-- [ ] Excluir de ese album las fuentes tecnicas o matematicas.
-- [ ] Incluir todas las fuentes visualmente utiles para composicion comun.
+- [ ] Keep `album-fuentes` as the main catalog for general graphic design.
+- [ ] Exclude technical or mathematical fonts from that album.
+- [ ] Include all fonts that are visually useful for common composition.
 
-### Album en español
+### Spanish album
 
-- [ ] Mantener `album-fuentes-espanol` como subconjunto con soporte correcto para `áéíóúüñÁÉÍÓÚÜÑ`.
-- [ ] Excluir tambien de ese album las fuentes tecnicas.
+- [ ] Keep `album-fuentes-espanol` as a subset with proper support for `áéíóúüñÁÉÍÓÚÜÑ`.
+- [ ] Also exclude technical fonts from that album.
 
-### Album tecnico
+### Technical album
 
-- [ ] Mantener `album-fuentes-tecnicas` como album separado para fuentes matematicas, simbolicas o de composicion tecnica.
-- [ ] Incluir fuentes de `jsMath`, `LyX`, `LaTeX`, `TeX` y similares cuando corresponda.
+- [ ] Keep `album-fuentes-tecnicas` as a separate album for mathematical, symbolic, or technical-composition fonts.
+- [ ] Include fonts from `jsMath`, `LyX`, `LaTeX`, `TeX`, and similar ecosystems when applicable.
 
-## Filtros utiles para diseñadores
+## Useful filters for designers
 
-### Filtros prioritarios
+### Priority filters
 
-- [ ] Fuentes con soporte para español.
-- [ ] Fuentes tecnicas o matematicas.
-- [ ] Fuentes monoespaciadas.
-- [ ] Fuentes serif.
-- [ ] Fuentes sans serif.
-- [ ] Fuentes script o caligraficas.
-- [ ] Fuentes display o decorativas.
-- [ ] Fuentes manuscritas.
-- [ ] Fuentes con muchas variantes.
-- [ ] Fuentes adecuadas para texto largo.
-- [ ] Fuentes adecuadas para titulos.
+- [ ] Fonts with Spanish support.
+- [ ] Technical or mathematical fonts.
+- [ ] Monospaced fonts.
+- [ ] Serif fonts.
+- [ ] Sans serif fonts.
+- [ ] Script or calligraphic fonts.
+- [ ] Display or decorative fonts.
+- [ ] Handwritten fonts.
+- [ ] Fonts with many variants.
+- [ ] Fonts suitable for long text.
+- [ ] Fonts suitable for titles.
 
-### Filtros tecnicos posibles
+### Possible technical filters
 
-- [ ] Filtrar por familia.
-- [ ] Filtrar por estilo.
-- [ ] Filtrar por cobertura Unicode.
-- [ ] Filtrar por cantidad de glifos.
-- [ ] Filtrar por ancho fijo o proporcional.
-- [ ] Filtrar por presencia de negrita real.
-- [ ] Filtrar por presencia de italica real.
-- [ ] Filtrar por small caps si la metadata lo permite.
-- [ ] Filtrar por OpenType features si se logra detectar.
-- [ ] Filtrar por variable font si se logra detectar.
+- [ ] Filter by family.
+- [ ] Filter by style.
+- [ ] Filter by Unicode coverage.
+- [ ] Filter by glyph count.
+- [ ] Filter by fixed width or proportional width.
+- [ ] Filter by real bold presence.
+- [ ] Filter by real italic presence.
+- [ ] Filter by small caps if metadata makes it possible.
+- [ ] Filter by OpenType features if they can be detected.
+- [ ] Filter by variable font if it can be detected.
 
-### Filtros graficos recomendables para el futuro
+### Recommended future graphic-design filters
 
 - [ ] `album-fuentes-monoespaciadas`
 - [ ] `album-fuentes-serif`
@@ -142,165 +142,165 @@
 - [ ] `album-fuentes-latino-basicas`
 - [ ] `album-fuentes-unicode-amplias`
 
-## Criterios de clasificacion ya definidos
+## Classification criteria already defined
 
-### Fuentes de diseño grafico general
+### General graphic design fonts
 
-- [ ] Mantener en el album principal las fuentes utiles para carteles, branding, publicaciones, maquetacion y composicion visual general.
+- [ ] Keep in the main album the fonts useful for posters, branding, publishing, layout, and general visual composition.
 
-### Fuentes en español
+### Spanish fonts
 
-- [ ] Mantener en el album español solo fuentes que realmente cubran los caracteres necesarios para usuarios hispanohablantes.
+- [ ] Keep in the Spanish album only fonts that truly cover the characters required by Spanish-speaking users.
 
-### Fuentes tecnicas
+### Technical fonts
 
-- [ ] Mantener fuera del album principal las fuentes tecnicas o matematicas.
-- [ ] Documentar por qué se excluyen del album principal.
-- [ ] Explicar que sirven mejor en otros programas especializados.
+- [ ] Keep technical or mathematical fonts out of the main album.
+- [ ] Document why they are excluded from the main album.
+- [ ] Explain that they are better suited for other specialized programs.
 
-## Programas y ecosistemas tecnicos a documentar
+## Technical programs and ecosystems to document
 
-- [ ] Explicar el uso de fuentes de `jsMath`.
-- [ ] Explicar el uso de fuentes de `LyX`.
-- [ ] Explicar el uso de fuentes de `LaTeX`.
-- [ ] Explicar el uso de fuentes de `TeX`.
-- [ ] Explicar que algunas dependen de metricas o convenciones de composicion especiales y no se ven bien en HTML comun.
+- [ ] Explain the use of `jsMath` fonts.
+- [ ] Explain the use of `LyX` fonts.
+- [ ] Explain the use of `LaTeX` fonts.
+- [ ] Explain the use of `TeX` fonts.
+- [ ] Explain that some depend on special metrics or composition conventions and do not display well in normal HTML.
 
-## Dependencias y aclaraciones del sistema
+## System dependencies and clarifications
 
-- [ ] Documentar que en `paquetes-deb` pueden venir tambien dependencias y no solo fuentes.
-- [ ] Explicar que algunas dependencias sirven para renderizado, otras para composicion tipografica y otras para programas especializados.
-- [ ] No asumir que todas las dependencias mejoran la visualizacion en navegador web normal.
+- [ ] Document that `paquetes-deb` may also contain dependencies and not only font packages.
+- [ ] Explain that some dependencies are for rendering, others for typographic composition, and others for specialized programs.
+- [ ] Do not assume that all dependencies improve visualization in a normal web browser.
 
-## Interfaz PyQt6
+## PyQt6 interface
 
-### Ventana principal
+### Main window
 
-- [x] Mostrar carpeta base de trabajo.
-- [x] Mostrar cantidad de paquetes `.deb` detectados.
-- [x] Mostrar estado de carpetas.
-- [x] Mostrar progreso de extraccion.
-- [x] Mostrar progreso de analisis.
-- [x] Mostrar progreso de generacion de HTML.
-- [ ] Mostrar progreso de generacion de tarjetas.
-- [ ] Mostrar progreso de generacion de PDFs.
+- [x] Show base working folder.
+- [x] Show number of detected `.deb` packages.
+- [x] Show folder status.
+- [x] Show extraction progress.
+- [x] Show analysis progress.
+- [x] Show HTML generation progress.
+- [ ] Show card generation progress.
+- [ ] Show PDF generation progress.
 
-### Botones minimos
+### Minimum buttons
 
-- [x] Boton `Preparar estructura`.
-- [x] Boton `Extraer todas las fuentes a album-fuentes`.
-- [x] Boton `Analizar y clasificar coleccion maestra`.
-- [ ] Boton `Generar album-fuentes-espanol`.
-- [ ] Boton `Generar album-fuentes-tecnicas`.
-- [x] Boton `Generar indices HTML`.
-- [ ] Boton `Generar tarjetas`.
-- [ ] Boton `Generar PDFs`.
+- [x] `Prepare structure` button.
+- [x] `Extract all fonts to album-fuentes` button.
+- [x] `Analyze and classify master collection` button.
+- [ ] `Generate album-fuentes-espanol` button.
+- [ ] `Generate album-fuentes-tecnicas` button.
+- [x] `Generate HTML indexes` button.
+- [ ] `Generate cards` button.
+- [ ] `Generate PDFs` button.
 
-### Mejoras futuras de interfaz
+### Future interface improvements
 
-- [ ] Consola de salida integrada.
-- [ ] Panel de reportes.
-- [ ] Vista previa de fuentes.
-- [ ] Selector de carpeta base.
-- [ ] Configuracion persistente.
+- [ ] Integrated output console.
+- [ ] Reports panel.
+- [ ] Font preview.
+- [ ] Base folder selector.
+- [ ] Persistent settings.
 
-## Arquitectura recomendada
+## Recommended architecture
 
-### Modulo de filesystem
+### Filesystem module
 
-- [x] Crear y validar carpetas.
-- [ ] Comprobar permisos.
-- [ ] Limpiar o reutilizar salidas.
+- [x] Create and validate folders.
+- [ ] Check permissions.
+- [ ] Clean or reuse outputs.
 
-### Modulo de paquetes `.deb`
+### `.deb` package module
 
-- [x] Detectar paquetes.
-- [x] Extraer con `dpkg-deb -x`.
-- [x] Determinar si contienen fuentes.
+- [x] Detect packages.
+- [x] Extract with `dpkg-deb -x`.
+- [x] Determine whether they contain fonts.
 
-### Modulo de analisis tipografico
+### Typographic analysis module
 
-- [x] Leer metadata de las fuentes.
-- [x] Detectar cobertura para español.
-- [x] Detectar fuentes tecnicas.
-- [ ] Detectar filtros utiles para diseñadores.
+- [x] Read font metadata.
+- [x] Detect Spanish coverage.
+- [x] Detect technical fonts.
+- [ ] Detect designer-useful filters.
 
-### Modulo de generacion HTML
+### HTML generation module
 
-- [x] Generar albumes HTML reutilizando la logica existente.
+- [x] Generate HTML albums by reusing the existing logic.
 
-### Modulo de tarjetas
+### Card module
 
-- [ ] Generar tarjetas PNG con Pillow.
+- [ ] Generate PNG cards with Pillow.
 
-### Modulo de PDF
+### PDF module
 
-- [ ] Generar PDF desde tarjetas o desde composicion directa.
+- [ ] Generate PDF from cards or from direct composition.
 
-### Modulo GUI
+### GUI module
 
-- [ ] Orquestar todo desde `PyQt6`.
-- [ ] No reimplementar la logica de negocio dentro de la GUI.
+- [ ] Orchestrate everything from `PyQt6`.
+- [ ] Do not reimplement business logic inside the GUI.
 
-## Reutilizacion del trabajo ya hecho
+## Reuse of previous work
 
-- [ ] Reutilizar `generar_album_fuentes.py`.
-- [ ] Reutilizar `generar_album_fuentes_espanol.py`.
-- [ ] Reutilizar `generar_album_fuentes_tecnicas.py`.
-- [ ] Reutilizar `generar_album_fuentes_espanol_imagenes.py` donde convenga.
-- [ ] Extraer la logica comun a funciones o modulos reutilizables.
+- [ ] Reuse `generar_album_fuentes.py`.
+- [ ] Reuse `generar_album_fuentes_espanol.py`.
+- [ ] Reuse `generar_album_fuentes_tecnicas.py`.
+- [ ] Reuse `generar_album_fuentes_espanol_imagenes.py` where appropriate.
+- [ ] Extract common logic into reusable functions or modules.
 
-## Fases sugeridas
+## Suggested phases
 
-### Fase 1
+### Phase 1
 
-- [x] Crear esqueleto del proyecto PyQt6.
-- [x] Crear ventana principal minima.
-- [x] Implementar `Preparar estructura`.
+- [x] Create the PyQt6 project skeleton.
+- [x] Create the minimum main window.
+- [x] Implement `Prepare structure`.
 
-### Fase 2
+### Phase 2
 
-- [x] Implementar extraccion total hacia `album-fuentes`.
-- [x] Implementar registro de errores y duplicados.
+- [x] Implement full extraction into `album-fuentes`.
+- [x] Implement error and duplicate logging.
 
-### Fase 3
+### Phase 3
 
-- [x] Implementar analisis de la coleccion maestra.
-- [x] Implementar derivacion a español y tecnicas.
+- [x] Implement analysis of the master collection.
+- [x] Implement derivation into Spanish and technical albums.
 
-### Fase 4
+### Phase 4
 
-- [x] Implementar generacion de HTML desde la GUI.
-- [ ] Implementar generacion de tarjetas desde la GUI.
+- [x] Implement HTML generation from the GUI.
+- [ ] Implement card generation from the GUI.
 
-### Fase 5
+### Phase 5
 
-- [ ] Implementar generacion de PDFs.
-- [ ] Optimizar rendimiento.
-- [ ] Evitar congelamiento de interfaz.
+- [ ] Implement PDF generation.
+- [ ] Optimize performance.
+- [ ] Prevent interface freezing.
 
-### Fase 6
+### Phase 6
 
-- [ ] Implementar nuevos filtros utiles para diseñadores.
-- [ ] Generar albumes derivados adicionales.
+- [ ] Implement new filters useful for designers.
+- [ ] Generate additional derived albums.
 
-## Riesgos y puntos a revisar
+## Risks and points to review
 
-- [ ] Paquetes `.deb` dañados o incompletos.
-- [ ] Fuentes duplicadas.
-- [ ] Fuentes que fallan al cargar con Pillow.
-- [ ] Dificultad para distinguir automaticamente algunas familias tecnicas.
-- [ ] Tiempos largos de renderizado.
-- [ ] Necesidad de hilos o procesos para no congelar la GUI.
-- [ ] Diferencias entre lo que renderiza Pillow y lo que renderiza el navegador.
-- [ ] Diferencias entre fuentes buenas para diseño y fuentes que solo parecen utiles a simple vista.
+- [ ] Damaged or incomplete `.deb` packages.
+- [ ] Duplicate fonts.
+- [ ] Fonts that fail to load with Pillow.
+- [ ] Difficulty automatically distinguishing some technical font families.
+- [ ] Long rendering times.
+- [ ] Need for threads or processes to avoid freezing the GUI.
+- [ ] Differences between what Pillow renders and what the browser renders.
+- [ ] Differences between fonts that are genuinely good for design and fonts that only seem useful at first glance.
 
-## Resultado final esperado
+## Expected final result
 
-- [ ] El usuario prepara la estructura con un boton.
-- [ ] El usuario coloca manualmente los `.deb` en `paquetes-deb`.
-- [ ] La aplicacion extrae todo primero a `album-fuentes`.
-- [ ] La aplicacion analiza esa coleccion maestra.
-- [ ] La aplicacion crea albumes derivados como español y tecnicas.
-- [ ] La aplicacion genera HTML, tarjetas y PDFs.
-- [ ] El sistema queda listo para crecer con nuevos filtros utiles para diseñadores.
+- [ ] The user prepares the structure with a button.
+- [ ] The user manually places the `.deb` files in `paquetes-deb`.
+- [ ] The application first extracts everything into `album-fuentes`.
+- [ ] The application analyzes that master collection.
+- [ ] The application creates derived albums such as Spanish and technical.
+- [ ] The application generates HTML, cards, and PDFs.
+- [ ] The system is ready to grow with new filters useful for designers.
