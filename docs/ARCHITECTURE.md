@@ -79,10 +79,12 @@ Derived paths already modeled:
 - `album-fuentes/fuentes-extraidas`
 - `album-fuentes-espanol/fuentes-extraidas`
 - `album-fuentes-tecnicas/fuentes-extraidas`
+- `album-fuentes/tarjetas-fuentes`
+- `album-fuentes-espanol/tarjetas-fuentes-espanol`
+- `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas`
 
 Future expansion:
 
-- card directories;
 - PDF output paths;
 - cleanup/reuse policies for generated outputs.
 
@@ -164,6 +166,17 @@ Architectural notes:
 - it reuses the same classification direction established by the analysis stage;
 - it is the first output-generation service integrated into the GUI.
 
+### Card generation service
+
+- `fontgallery/services/card_generation.py`
+
+Responsibilities:
+
+- render per-font cards as PNG images with Pillow;
+- use the locally extracted font file itself for specimen rendering;
+- exclude technical fonts from the main album card set;
+- provide deterministic file output for later PDF composition.
+
 ## Data flow
 
 The current data flow is:
@@ -176,6 +189,7 @@ The current data flow is:
    - Spanish-capable non-technical fonts;
    - technical fonts.
 6. `HtmlGenerationService` renders the HTML albums from those extracted directories.
+7. `CardGenerationService` renders PNG cards from those extracted directories.
 
 This establishes `album-fuentes` as the source of truth for later album generation.
 
@@ -213,6 +227,7 @@ Every processing stage should leave inspectable files on disk. This is useful be
 The current architecture already depends on:
 
 - `PyQt6`
+- `Pillow`
 - `dpkg-deb`
 - `fc-scan`
 - `pylupdate6`
@@ -220,20 +235,7 @@ The current architecture already depends on:
 
 Likely future dependencies:
 
-- `Pillow` for image cards;
 - browser or renderer integration only if needed for HTML-to-PDF workflows.
-
-### Card generation service
-
-Proposed file:
-
-- `fontgallery/services/card_generation.py`
-
-Responsibilities:
-
-- render per-font cards as PNG images;
-- provide deterministic file output for PDF composition;
-- act as an alternative to HTML-based rendering.
 
 ### PDF generation service
 
@@ -250,7 +252,6 @@ Responsibilities:
 ## Current architectural risks
 
 - long-running operations still execute on the GUI thread;
-- write checks are still shallow;
 - technical classification may need richer rules and documentation;
 - there is not yet a persistent metadata cache.
 
@@ -258,7 +259,7 @@ Responsibilities:
 
 The next architectural step should be:
 
-1. introduce a card generation service;
+1. introduce a PDF generation service;
 2. define a reusable font record format shared by extraction, analysis, and HTML generation;
 3. keep the GUI limited to starting jobs and showing results;
 4. prepare later threading or worker infrastructure once output generation is integrated.

@@ -17,6 +17,7 @@ from PyQt6.QtWidgets import (
 )
 
 from .services.analysis import AnalysisService
+from .services.card_generation import CardGenerationService
 from .services.extraction import ExtractionService
 from .services.html_generation import HtmlGenerationService
 from .services.workspace import WorkspaceService
@@ -29,6 +30,7 @@ class MainWindow(QMainWindow):
         self.extraction_service = ExtractionService(workspace)
         self.analysis_service = AnalysisService(workspace)
         self.html_generation_service = HtmlGenerationService(workspace)
+        self.card_generation_service = CardGenerationService(workspace)
         self.path_labels: dict[str, QLabel] = {}
         self.exists_labels: dict[str, QLabel] = {}
         self.write_labels: dict[str, QLabel] = {}
@@ -70,6 +72,7 @@ class MainWindow(QMainWindow):
         self.extract_button_text = self.tr("Extract all fonts to the main album")
         self.analyze_button_text = self.tr("Analyze and classify the master collection")
         self.html_button_text = self.tr("Generate HTML indexes")
+        self.cards_button_text = self.tr("Generate PNG cards")
         self.refresh_button_text = self.tr("Refresh status")
         self.exists_text = self.tr("Exists")
         self.missing_text = self.tr("Missing")
@@ -114,8 +117,15 @@ class MainWindow(QMainWindow):
         self.html_completed_message_text = self.tr(
             "The HTML font albums were generated successfully.\n\n{details}"
         )
+        self.cards_completed_title_text = self.tr("PNG card generation completed")
+        self.cards_completed_message_text = self.tr(
+            "The PNG font cards were generated successfully.\n\n{details}"
+        )
         self.html_summary_log_text = self.tr(
             "HTML album '{label}': included={included}, excluded={excluded}, path={path}"
+        )
+        self.cards_summary_log_text = self.tr(
+            "PNG cards '{label}': generated={generated}, excluded={excluded}, render errors={errors}, path={path}"
         )
         self.exclusion_report_log_text = self.tr("Exclusion report: {path}")
         self.external_tool_failed_text = self.tr("An external tool failed:\n{error}")
@@ -123,6 +133,7 @@ class MainWindow(QMainWindow):
         self.extract_failed_text = self.tr("Could not extract the fonts:\n{error}")
         self.analysis_failed_text = self.tr("Could not analyze the collection:\n{error}")
         self.html_failed_text = self.tr("Could not generate HTML indexes:\n{error}")
+        self.cards_failed_text = self.tr("Could not generate PNG cards:\n{error}")
         self.error_log_text = self.tr("ERROR: {error}")
         self.warning_log_text = self.tr("WARNING: {error}")
 
@@ -200,6 +211,10 @@ class MainWindow(QMainWindow):
         html_button = QPushButton(self.html_button_text)
         html_button.clicked.connect(self.on_generate_html_indexes)
         layout.addWidget(html_button)
+
+        cards_button = QPushButton(self.cards_button_text)
+        cards_button.clicked.connect(self.on_generate_png_cards)
+        layout.addWidget(cards_button)
 
         refresh_button = QPushButton(self.refresh_button_text)
         refresh_button.clicked.connect(self.refresh_status)
@@ -371,6 +386,45 @@ class MainWindow(QMainWindow):
             self.html_completed_message_text.format(
                 details="\n".join(
                     f"{self.album_labels_text.get(summary.label, summary.label)}: {summary.included_fonts} fonts"
+                    for summary in summaries
+                )
+            ),
+        )
+
+    def on_generate_png_cards(self) -> None:
+        try:
+            summaries = self.card_generation_service.generate_all_albums(log=self._log)
+        except FileNotFoundError as exc:
+            QMessageBox.warning(self, self.html_missing_title_text, str(exc))
+            self._log(self.warning_log_text.format(error=exc))
+            return
+        except subprocess.CalledProcessError as exc:
+            QMessageBox.critical(self, self.error_title_text, self.external_tool_failed_text.format(error=exc))
+            self._log(self.error_log_text.format(error=exc))
+            return
+        except (OSError, RuntimeError) as exc:
+            QMessageBox.critical(self, self.error_title_text, self.cards_failed_text.format(error=exc))
+            self._log(self.error_log_text.format(error=exc))
+            return
+
+        for summary in summaries:
+            label_text = self.album_labels_text.get(summary.label, summary.label)
+            self._log(
+                self.cards_summary_log_text.format(
+                    label=label_text,
+                    generated=summary.generated_cards,
+                    excluded=summary.excluded_fonts,
+                    errors=summary.render_errors,
+                    path=summary.output_dir,
+                )
+            )
+
+        QMessageBox.information(
+            self,
+            self.cards_completed_title_text,
+            self.cards_completed_message_text.format(
+                details="\n".join(
+                    f"{self.album_labels_text.get(summary.label, summary.label)}: {summary.generated_cards} cards"
                     for summary in summaries
                 )
             ),

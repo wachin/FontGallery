@@ -31,9 +31,9 @@
 
 ### Card subfolders
 
-- [ ] Create `/album-fuentes/tarjetas-fuentes` if it does not exist.
-- [ ] Create `/album-fuentes-espanol/tarjetas-fuentes-espanol` if it does not exist.
-- [ ] Create `/album-fuentes-tecnicas/tarjetas-fuentes-tecnicas` if it does not exist.
+- [x] Create `/album-fuentes/tarjetas-fuentes` if it does not exist.
+- [x] Create `/album-fuentes-espanol/tarjetas-fuentes-espanol` if it does not exist.
+- [x] Create `/album-fuentes-tecnicas/tarjetas-fuentes-tecnicas` if it does not exist.
 
 ## Desired main workflow
 
@@ -74,9 +74,9 @@
 
 ### Step 6. Generate cards
 
-- [ ] Generate PNG cards for `album-fuentes`.
-- [ ] Generate PNG cards for `album-fuentes-espanol`.
-- [ ] Generate PNG cards for `album-fuentes-tecnicas`.
+- [x] Generate PNG cards for `album-fuentes`.
+- [x] Generate PNG cards for `album-fuentes-espanol`.
+- [x] Generate PNG cards for `album-fuentes-tecnicas`.
 
 ### Step 7. Generate PDFs
 
@@ -182,7 +182,7 @@
 - [x] Show extraction progress.
 - [x] Show analysis progress.
 - [x] Show HTML generation progress.
-- [ ] Show card generation progress.
+- [x] Show card generation progress.
 - [ ] Show PDF generation progress.
 
 ### Minimum buttons
@@ -193,7 +193,7 @@
 - [ ] `Generate album-fuentes-espanol` button.
 - [ ] `Generate album-fuentes-tecnicas` button.
 - [x] `Generate HTML indexes` button.
-- [ ] `Generate cards` button.
+- [x] `Generate cards` button.
 - [ ] `Generate PDFs` button.
 
 ### Future interface improvements
@@ -231,7 +231,7 @@
 
 ### Card module
 
-- [ ] Generate PNG cards with Pillow.
+- [x] Generate PNG cards with Pillow.
 
 ### PDF module
 
@@ -271,7 +271,7 @@
 ### Phase 4
 
 - [x] Implement HTML generation from the GUI.
-- [ ] Implement card generation from the GUI.
+- [x] Implement card generation from the GUI.
 
 ### Phase 5
 

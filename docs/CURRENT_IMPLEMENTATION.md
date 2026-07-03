@@ -9,6 +9,7 @@ At this stage, the base `FontGallery` application flow has been implemented to:
 - analyze the master collection;
 - derive subsets for Spanish-capable fonts and technical fonts.
 - generate HTML albums for the main, Spanish, and technical collections.
+- generate PNG cards for the main, Spanish, and technical collections.
 
 ## Current project structure
 
@@ -29,6 +30,7 @@ The main window already includes these buttons:
 - `Extraer todas las fuentes a album-fuentes`
 - `Analizar y clasificar colección maestra`
 - `Generar indices HTML`
+- `Generar tarjetas PNG`
 - `Actualizar estado`
 
 It also shows:
@@ -44,6 +46,7 @@ It also shows:
 - `fontgallery/services/extraction.py`
 - `fontgallery/services/analysis.py`
 - `fontgallery/services/html_generation.py`
+- `fontgallery/services/card_generation.py`
 
 ### Translation assets
 
@@ -68,8 +71,11 @@ It also exposes derived paths used by the services:
 - `album-fuentes/fuentes-extraidas`
 - `album-fuentes-espanol/fuentes-extraidas`
 - `album-fuentes-tecnicas/fuentes-extraidas`
+- `album-fuentes/tarjetas-fuentes`
+- `album-fuentes-espanol/tarjetas-fuentes-espanol`
+- `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas`
 
-The prepare step now also creates those derived extracted-font folders up front and validates write access before attempting to create missing directories.
+The prepare step now also creates those derived extracted-font and card folders up front and validates write access before attempting to create missing directories.
 
 ### 2. Extract fonts from `.deb` packages
 
@@ -151,7 +157,22 @@ Current behavior:
 - excludes technical fonts from the main album;
 - writes an exclusion report for technical fonts removed from the main album.
 
-### 6. Load translations
+### 6. Generate PNG cards
+
+`CardGenerationService` generates these directories:
+
+- `album-fuentes/tarjetas-fuentes`
+- `album-fuentes-espanol/tarjetas-fuentes-espanol`
+- `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas`
+
+Current behavior:
+
+- renders one PNG card per extracted font with Pillow;
+- uses the local extracted font file as the specimen font;
+- excludes technical fonts from the main card set;
+- keeps Spanish and technical card sets aligned with the derived extracted subsets.
+
+### 7. Load translations
 
 The application now uses English as its source UI language and prepares interface strings with `self.tr(...)` in the main window.
 
@@ -178,10 +199,11 @@ These blocks are already implemented:
 - master collection analysis;
 - derivation into Spanish and technical albums.
 - HTML generation for all three albums from the GUI.
+- PNG card generation for all three albums from the GUI.
 
 ## External dependencies used by the current code
 
-In addition to `PyQt6`, the current flow depends on these system tools:
+In addition to `PyQt6` and `Pillow`, the current flow depends on these system tools:
 
 - `dpkg-deb`
 - `fc-scan`
@@ -195,6 +217,7 @@ For development and testing, the current recommended package set is:
 ```bash
 sudo apt install \
   python3-pyqt6 \
+  python3-pil \
   python3-pytest \
   pyqt6-dev-tools \
   qtchooser \
@@ -205,6 +228,7 @@ sudo apt install \
 Purpose of each package:
 
 - `python3-pyqt6`: GUI runtime and Qt Python bindings.
+- `python3-pil`: Pillow imaging library used for PNG card rendering.
 - `python3-pytest`: test runner for the local test suite.
 - `pyqt6-dev-tools`: provides `pylupdate6` for translation source updates.
 - `qtchooser`: provides `lrelease` in this environment for `.qm` generation.
@@ -218,7 +242,6 @@ Repository reference files available for package review:
 
 ## Current limitations
 
-- PNG card generation is not implemented in the GUI yet;
 - PDF generation is not implemented in the GUI yet;
 - HTML generation currently depends on the extracted directories already being present;
 - technical font detection is still heuristic-based;
@@ -234,13 +257,14 @@ The project now includes a `tests/` directory.
 Run the tests with:
 
 ```bash
-pytest
+env QT_QPA_PLATFORM=offscreen pytest -q
 ```
 
 Current coverage includes:
 
 - workspace naming in English and Spanish;
 - reuse of an existing localized workspace;
+- PNG card generation from extracted fonts;
 - loading of Qt translations;
 - translation of UI and service strings.
 
@@ -257,8 +281,9 @@ python3 main.py
 3. Click `Extraer todas las fuentes a album-fuentes`.
 4. Click `Analizar y clasificar colección maestra`.
 5. Click `Generar indices HTML`.
-6. Review the log panel and the generated folders.
+6. Click `Generar tarjetas PNG`.
+7. Review the log panel and the generated folders.
 
 ## Recommended next step
 
-The next most useful step is to add PNG card generation as a reusable service and connect it to the GUI, using the same album structure already produced by extraction, analysis, and HTML generation.
+The next most useful step is to add PDF generation as a reusable service and connect it to the GUI, reusing the PNG cards or the existing HTML output as stable intermediate artifacts.

@@ -21,6 +21,9 @@ class WorkspaceScheme:
     album_main_dirname: str
     album_es_dirname: str
     album_tech_dirname: str
+    album_main_cards_dirname: str
+    album_es_cards_dirname: str
+    album_tech_cards_dirname: str
     album_main_html_name: str
     album_es_html_name: str
     album_tech_html_name: str
@@ -34,6 +37,9 @@ WORKSPACE_SCHEMES = {
         album_main_dirname="font-album",
         album_es_dirname="spanish-font-album",
         album_tech_dirname="technical-font-album",
+        album_main_cards_dirname="font-cards",
+        album_es_cards_dirname="spanish-font-cards",
+        album_tech_cards_dirname="technical-font-cards",
         album_main_html_name="font-album.html",
         album_es_html_name="spanish-font-album.html",
         album_tech_html_name="technical-font-album.html",
@@ -45,6 +51,9 @@ WORKSPACE_SCHEMES = {
         album_main_dirname="album-fuentes",
         album_es_dirname="album-fuentes-espanol",
         album_tech_dirname="album-fuentes-tecnicas",
+        album_main_cards_dirname="tarjetas-fuentes",
+        album_es_cards_dirname="tarjetas-fuentes-espanol",
+        album_tech_cards_dirname="tarjetas-fuentes-tecnicas",
         album_main_html_name="album-fuentes.html",
         album_es_html_name="album-fuentes-espanol.html",
         album_tech_html_name="album-fuentes-tecnicas.html",
@@ -95,6 +104,9 @@ class WorkspaceService:
             ManagedPath("album_main_extract", "Main extracted fonts", self.album_main_extract_dir),
             ManagedPath("album_es_extract", "Spanish extracted fonts", self.album_es_extract_dir),
             ManagedPath("album_tech_extract", "Technical extracted fonts", self.album_tech_extract_dir),
+            ManagedPath("album_main_cards", "Main cards", self.album_main_cards_dir),
+            ManagedPath("album_es_cards", "Spanish cards", self.album_es_cards_dir),
+            ManagedPath("album_tech_cards", "Technical cards", self.album_tech_cards_dir),
         ]
 
     @property
@@ -165,6 +177,33 @@ class WorkspaceService:
             parent=self.album_tech_dir,
             preferred_name=scheme.album_tech_html_name,
             candidate_names=[scheme.album_tech_html_name for scheme in WORKSPACE_SCHEMES.values()],
+        )
+
+    @property
+    def album_main_cards_dir(self) -> Path:
+        scheme = self._scheme_for_album_dir(self.album_main_dir, "album_main")
+        return self._resolve_child_existing_or_preferred(
+            parent=self.album_main_dir,
+            preferred_name=scheme.album_main_cards_dirname,
+            candidate_names=[scheme.album_main_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
+        )
+
+    @property
+    def album_es_cards_dir(self) -> Path:
+        scheme = self._scheme_for_album_dir(self.album_es_dir, "album_es")
+        return self._resolve_child_existing_or_preferred(
+            parent=self.album_es_dir,
+            preferred_name=scheme.album_es_cards_dirname,
+            candidate_names=[scheme.album_es_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
+        )
+
+    @property
+    def album_tech_cards_dir(self) -> Path:
+        scheme = self._scheme_for_album_dir(self.album_tech_dir, "album_tech")
+        return self._resolve_child_existing_or_preferred(
+            parent=self.album_tech_dir,
+            preferred_name=scheme.album_tech_cards_dirname,
+            candidate_names=[scheme.album_tech_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
         )
 
     def path_status(self) -> list[dict[str, str | bool]]:

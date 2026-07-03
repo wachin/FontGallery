@@ -14,10 +14,13 @@ def test_workspace_creates_english_structure_in_empty_directory(tmp_path: Path) 
     assert {path.relative_to(tmp_path).as_posix() for path in created} == {
         "deb-packages",
         "font-album",
+        "font-album/font-cards",
         "font-album/extracted-fonts",
         "spanish-font-album",
+        "spanish-font-album/spanish-font-cards",
         "spanish-font-album/extracted-fonts",
         "technical-font-album",
+        "technical-font-album/technical-font-cards",
         "technical-font-album/extracted-fonts",
     }
     assert workspace.packages_dir.name == "deb-packages"
@@ -27,6 +30,9 @@ def test_workspace_creates_english_structure_in_empty_directory(tmp_path: Path) 
     assert workspace.album_main_extract_dir.is_dir()
     assert workspace.album_es_extract_dir.is_dir()
     assert workspace.album_tech_extract_dir.is_dir()
+    assert workspace.album_main_cards_dir.name == "font-cards"
+    assert workspace.album_es_cards_dir.name == "spanish-font-cards"
+    assert workspace.album_tech_cards_dir.name == "technical-font-cards"
 
 
 def test_workspace_creates_spanish_structure_in_empty_directory(tmp_path: Path) -> None:
@@ -38,15 +44,21 @@ def test_workspace_creates_spanish_structure_in_empty_directory(tmp_path: Path) 
         "paquetes-deb",
         "album-fuentes",
         "album-fuentes/fuentes-extraidas",
+        "album-fuentes/tarjetas-fuentes",
         "album-fuentes-espanol",
         "album-fuentes-espanol/fuentes-extraidas",
+        "album-fuentes-espanol/tarjetas-fuentes-espanol",
         "album-fuentes-tecnicas",
         "album-fuentes-tecnicas/fuentes-extraidas",
+        "album-fuentes-tecnicas/tarjetas-fuentes-tecnicas",
     }
     assert workspace.packages_dir.name == "paquetes-deb"
     assert workspace.album_main_dir.name == "album-fuentes"
     assert workspace.album_es_dir.name == "album-fuentes-espanol"
     assert workspace.album_tech_dir.name == "album-fuentes-tecnicas"
+    assert workspace.album_main_cards_dir.name == "tarjetas-fuentes"
+    assert workspace.album_es_cards_dir.name == "tarjetas-fuentes-espanol"
+    assert workspace.album_tech_cards_dir.name == "tarjetas-fuentes-tecnicas"
 
 
 def test_workspace_reuses_existing_spanish_structure_for_english_locale(tmp_path: Path) -> None:
@@ -64,6 +76,9 @@ def test_workspace_reuses_existing_spanish_structure_for_english_locale(tmp_path
     assert workspace.album_main_dir.name == "album-fuentes"
     assert workspace.album_es_dir.name == "album-fuentes-espanol"
     assert workspace.album_tech_dir.name == "album-fuentes-tecnicas"
+    assert workspace.album_main_cards_dir.name == "tarjetas-fuentes"
+    assert workspace.album_es_cards_dir.name == "tarjetas-fuentes-espanol"
+    assert workspace.album_tech_cards_dir.name == "tarjetas-fuentes-tecnicas"
 
 
 def test_workspace_status_reports_missing_paths_as_writable_when_parent_is_writable(tmp_path: Path) -> None:

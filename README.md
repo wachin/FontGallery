@@ -9,6 +9,7 @@ For Debian 12 / MX Linux 23, install at least:
 ```bash
 sudo apt install \
   python3-pyqt6 \
+  python3-pil \
   python3-pytest \
   pyqt6-dev-tools \
   qtchooser \
@@ -19,6 +20,7 @@ sudo apt install \
 What each package is used for:
 
 - `python3-pyqt6`: runtime GUI bindings.
+- `python3-pil`: Pillow runtime used for PNG card generation.
 - `python3-pytest`: test runner for the `tests/` directory.
 - `pyqt6-dev-tools`: provides `pylupdate6` for updating `.ts` translation sources.
 - `qtchooser`: provides `lrelease` in this Debian 12 / MX Linux 23 environment.
@@ -41,6 +43,7 @@ pip install -r requirements.txt
 At the moment it contains:
 
 - `PyQt6`
+- `Pillow`
 
 On Debian-based systems, the recommended installation method for this project is the `apt` packages listed above.
 
@@ -64,8 +67,10 @@ The current tests cover:
 
 - workspace folder naming for English and Spanish;
 - creation of the derived extracted-font folders;
+- creation of the derived PNG card folders;
 - workspace write-access validation;
 - reuse of an existing localized workspace;
+- PNG card generation from extracted fonts;
 - loading of Qt translations;
 - translation of UI and service strings.
 

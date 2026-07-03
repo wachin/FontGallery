@@ -4,5 +4,34 @@ __pycache__/
 *.pyd
 .pytest_cache/
 .mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
 build/
 dist/
+*.egg-info/
+
+# Local editor files
+.idea/
+.vscode/
+*.swp
+*~
+
+# FontGallery generated workspaces
+deb-packages/
+paquetes-deb/
+font-album/
+album-fuentes/
+spanish-font-album/
+album-fuentes-espanol/
+technical-font-album/
+album-fuentes-tecnicas/
