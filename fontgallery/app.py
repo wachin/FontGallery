@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from PyQt6.QtCore import QLocale
 from PyQt6.QtWidgets import QApplication
 
 from .main_window import MainWindow
@@ -15,7 +16,7 @@ def main() -> int:
     app.setOrganizationName("FontGallery")
 
     project_root = Path.cwd()
-    workspace = WorkspaceService(project_root)
+    workspace = WorkspaceService(project_root, language_code=QLocale.system().name())
     window = MainWindow(workspace)
     window.show()
     return app.exec()
