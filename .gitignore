@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+*.py,cover
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
@@ -9,6 +10,8 @@ __pycache__/
 .coverage.*
 htmlcov/
 .hypothesis/
+.tox/
+.nox/
 
 # Virtual environments
 .venv/
@@ -26,6 +29,9 @@ dist/
 *.swp
 *~
 
+# Local runtime files
+*.log
+
 # FontGallery generated workspaces
 deb-packages/
 paquetes-deb/
@@ -35,4 +41,3 @@ spanish-font-album/
 album-fuentes-espanol/
 technical-font-album/
 album-fuentes-tecnicas/
-
