@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable
 
 from PyQt6.QtCore import QCoreApplication
 
@@ -220,13 +221,26 @@ class WorkspaceService:
             )
         return statuses
 
-    def prepare_structure(self) -> list[Path]:
+    def prepare_structure(
+        self,
+        progress: Callable[[int, int, str], None] | None = None,
+    ) -> list[Path]:
         created: list[Path] = []
-        for item in self.required_directories:
+        total = len(self.required_directories)
+        for index, item in enumerate(self.required_directories, start=1):
             self._ensure_writable(item.path)
             if not item.path.exists():
                 item.path.mkdir(parents=True, exist_ok=True)
                 created.append(item.path)
+            if progress is not None:
+                progress(
+                    index,
+                    total,
+                    QCoreApplication.translate(
+                        "WorkspaceService",
+                        "Verified workspace path: {path}",
+                    ).format(path=item.path),
+                )
         return created
 
     def deb_package_count(self) -> int:

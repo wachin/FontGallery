@@ -125,6 +125,7 @@ class AnalysisService:
     def analyze_main_collection(
         self,
         log: Callable[[str], None] | None = None,
+        progress: Callable[[int, int, str], None] | None = None,
     ) -> tuple[AnalysisSummary, list[AnalyzedFont]]:
         def emit(message: str) -> None:
             if log is not None:
@@ -151,6 +152,18 @@ class AnalysisService:
         analyzed: list[AnalyzedFont] = []
         spanish_count = 0
         technical_count = 0
+        total = len(font_paths) + 2
+        completed = 0
+
+        if progress is not None:
+            progress(
+                0,
+                total,
+                QCoreApplication.translate(
+                    "AnalysisService",
+                    "Starting analysis of {count} extracted fonts",
+                ).format(count=len(font_paths)),
+            )
 
         for font_path in font_paths:
             family, style, fullname, charset = scan_font(font_path)
@@ -171,6 +184,16 @@ class AnalysisService:
             )
             spanish_count += int(supports_spanish)
             technical_count += int(is_technical)
+            completed += 1
+            if progress is not None:
+                progress(
+                    completed,
+                    total,
+                    QCoreApplication.translate(
+                        "AnalysisService",
+                        "Analyzed font {current}/{total_fonts}: {font}",
+                    ).format(current=completed, total_fonts=len(font_paths), font=font_path.name),
+                )
 
         analyzed.sort(
             key=lambda item: (
@@ -187,12 +210,32 @@ class AnalysisService:
             emit,
             self.workspace.album_es_dir.name,
         )
+        completed += 1
+        if progress is not None:
+            progress(
+                completed,
+                total,
+                QCoreApplication.translate(
+                    "AnalysisService",
+                    "Copied Spanish subset: {count} fonts",
+                ).format(count=copied_spanish),
+            )
         copied_technical = self._copy_subset(
             [font for font in analyzed if font.is_technical],
             self.workspace.album_tech_extract_dir,
             emit,
             self.workspace.album_tech_dir.name,
         )
+        completed += 1
+        if progress is not None:
+            progress(
+                completed,
+                total,
+                QCoreApplication.translate(
+                    "AnalysisService",
+                    "Copied technical subset: {count} fonts",
+                ).format(count=copied_technical),
+            )
 
         summary = AnalysisSummary(
             total_fonts=len(analyzed),

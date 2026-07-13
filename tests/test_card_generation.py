@@ -53,6 +53,35 @@ def test_card_generation_creates_png_cards_for_all_albums(tmp_path: Path) -> Non
     assert (workspace.album_tech_cards_dir / "latex-demo" / "latex-demo__cmex-demo.png").is_file()
 
 
+def test_card_generation_reports_progress(tmp_path: Path) -> None:
+    try:
+        font_path = _find_test_font()
+    except FileNotFoundError as exc:
+        pytest.skip(str(exc))
+
+    workspace = WorkspaceService(tmp_path, language_code="es_ES")
+    workspace.prepare_structure()
+
+    for target in (
+        workspace.album_main_extract_dir / "fonts-demo" / "fonts-demo__DejaVuSans.ttf",
+        workspace.album_es_extract_dir / "fonts-demo" / "fonts-demo__DejaVuSans.ttf",
+        workspace.album_tech_extract_dir / "latex-demo" / "latex-demo__cmex-demo.ttf",
+    ):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(font_path, target)
+
+    progress_updates: list[tuple[int, int, str]] = []
+    service = CardGenerationService(workspace)
+
+    service.generate_all_albums(
+        progress=lambda current, total, label: progress_updates.append((current, total, label))
+    )
+
+    assert progress_updates
+    assert progress_updates[0][0] == 0
+    assert progress_updates[-1][0] == progress_updates[-1][1]
+
+
 def test_card_generation_wraps_sample_lines_to_card_width(tmp_path: Path) -> None:
     try:
         font_path = _find_test_font()

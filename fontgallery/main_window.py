@@ -4,12 +4,14 @@ import subprocess
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
+    QApplication,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
     QMainWindow,
     QMessageBox,
+    QProgressBar,
     QPushButton,
     QTextEdit,
     QVBoxLayout,
@@ -34,7 +36,10 @@ class MainWindow(QMainWindow):
         self.path_labels: dict[str, QLabel] = {}
         self.exists_labels: dict[str, QLabel] = {}
         self.write_labels: dict[str, QLabel] = {}
+        self.action_buttons: list[QPushButton] = []
         self.package_count_label = QLabel()
+        self.progress_label = QLabel()
+        self.progress_bar = QProgressBar()
         self.log_output = QTextEdit()
         self._init_texts()
 
@@ -74,6 +79,13 @@ class MainWindow(QMainWindow):
         self.html_button_text = self.tr("Generate HTML indexes")
         self.cards_button_text = self.tr("Generate PNG cards")
         self.refresh_button_text = self.tr("Refresh status")
+        self.progress_idle_text = self.tr("Ready.")
+        self.progress_prepare_text = self.tr("Preparing workspace...")
+        self.progress_extract_text = self.tr("Extracting fonts...")
+        self.progress_analyze_text = self.tr("Analyzing master collection...")
+        self.progress_html_text = self.tr("Generating HTML indexes...")
+        self.progress_cards_text = self.tr("Generating PNG cards...")
+        self.progress_completed_text = self.tr("Completed.")
         self.exists_text = self.tr("Exists")
         self.missing_text = self.tr("Missing")
         self.writable_text = self.tr("Writable")
@@ -194,33 +206,49 @@ class MainWindow(QMainWindow):
 
     def _build_actions_box(self) -> QGroupBox:
         box = QGroupBox(self.actions_group_text)
-        layout = QHBoxLayout(box)
+        layout = QVBoxLayout(box)
+        buttons_layout = QHBoxLayout()
 
         prepare_button = QPushButton(self.prepare_button_text)
         prepare_button.clicked.connect(self.on_prepare_structure)
-        layout.addWidget(prepare_button)
+        buttons_layout.addWidget(prepare_button)
+        self.action_buttons.append(prepare_button)
 
         extract_button = QPushButton(self.extract_button_text)
         extract_button.clicked.connect(self.on_extract_main_fonts)
-        layout.addWidget(extract_button)
+        buttons_layout.addWidget(extract_button)
+        self.action_buttons.append(extract_button)
 
         analyze_button = QPushButton(self.analyze_button_text)
         analyze_button.clicked.connect(self.on_analyze_main_collection)
-        layout.addWidget(analyze_button)
+        buttons_layout.addWidget(analyze_button)
+        self.action_buttons.append(analyze_button)
 
         html_button = QPushButton(self.html_button_text)
         html_button.clicked.connect(self.on_generate_html_indexes)
-        layout.addWidget(html_button)
+        buttons_layout.addWidget(html_button)
+        self.action_buttons.append(html_button)
 
         cards_button = QPushButton(self.cards_button_text)
         cards_button.clicked.connect(self.on_generate_png_cards)
-        layout.addWidget(cards_button)
+        buttons_layout.addWidget(cards_button)
+        self.action_buttons.append(cards_button)
 
         refresh_button = QPushButton(self.refresh_button_text)
         refresh_button.clicked.connect(self.refresh_status)
-        layout.addWidget(refresh_button)
+        buttons_layout.addWidget(refresh_button)
+        self.action_buttons.append(refresh_button)
 
-        layout.addStretch(1)
+        buttons_layout.addStretch(1)
+        layout.addLayout(buttons_layout)
+
+        self.progress_label.setText(self.progress_idle_text)
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.progress_bar.setTextVisible(True)
+        self.progress_bar.setFormat("%v/%m (%p%)")
+        layout.addWidget(self.progress_label)
+        layout.addWidget(self.progress_bar)
         return box
 
     def _build_log_box(self) -> QGroupBox:
@@ -260,9 +288,11 @@ class MainWindow(QMainWindow):
         )
 
     def on_prepare_structure(self) -> None:
+        self._start_action_progress(self.progress_prepare_text)
         try:
-            created = self.workspace.prepare_structure()
+            created = self.workspace.prepare_structure(progress=self._update_progress)
         except OSError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.workspace_prepare_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
@@ -273,21 +303,26 @@ class MainWindow(QMainWindow):
         else:
             self._log(self.no_folders_created_log_text)
 
+        self._complete_action_progress(self.progress_completed_text)
         self.refresh_status()
         QMessageBox.information(self, self.workspace_ready_title_text, self.workspace_ready_message_text)
 
     def on_extract_main_fonts(self) -> None:
+        self._start_action_progress(self.progress_extract_text)
         try:
-            summary, _ = self.extraction_service.extract_to_main_album(log=self._log)
+            summary, _ = self.extraction_service.extract_to_main_album(log=self._log, progress=self._update_progress)
         except FileNotFoundError as exc:
+            self._finish_action_progress()
             QMessageBox.warning(self, self.no_packages_title_text, str(exc))
             self._log(self.warning_log_text.format(error=exc))
             return
         except subprocess.CalledProcessError as exc:  # type: ignore[name-defined]
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.external_tool_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
         except OSError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.extract_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
@@ -302,6 +337,7 @@ class MainWindow(QMainWindow):
             )
         )
         self._log(self.extract_dir_log_text.format(path=summary.extract_dir))
+        self._complete_action_progress(self.progress_completed_text)
         self.refresh_status()
         QMessageBox.information(
             self,
@@ -314,17 +350,21 @@ class MainWindow(QMainWindow):
         )
 
     def on_analyze_main_collection(self) -> None:
+        self._start_action_progress(self.progress_analyze_text)
         try:
-            summary, _ = self.analysis_service.analyze_main_collection(log=self._log)
+            summary, _ = self.analysis_service.analyze_main_collection(log=self._log, progress=self._update_progress)
         except FileNotFoundError as exc:
+            self._finish_action_progress()
             QMessageBox.warning(self, self.master_missing_title_text, str(exc))
             self._log(self.warning_log_text.format(error=exc))
             return
         except subprocess.CalledProcessError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.external_tool_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
         except OSError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.analysis_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
@@ -338,6 +378,7 @@ class MainWindow(QMainWindow):
                 copied_technical=summary.copied_to_technical,
             )
         )
+        self._complete_action_progress(self.progress_completed_text)
         self.refresh_status()
         QMessageBox.information(
             self,
@@ -352,17 +393,21 @@ class MainWindow(QMainWindow):
         )
 
     def on_generate_html_indexes(self) -> None:
+        self._start_action_progress(self.progress_html_text)
         try:
-            summaries = self.html_generation_service.generate_all_albums(log=self._log)
+            summaries = self.html_generation_service.generate_all_albums(log=self._log, progress=self._update_progress)
         except FileNotFoundError as exc:
+            self._finish_action_progress()
             QMessageBox.warning(self, self.html_missing_title_text, str(exc))
             self._log(self.warning_log_text.format(error=exc))
             return
         except subprocess.CalledProcessError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.external_tool_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
         except OSError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.html_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
@@ -380,6 +425,7 @@ class MainWindow(QMainWindow):
             if summary.excluded_report is not None:
                 self._log(self.exclusion_report_log_text.format(path=summary.excluded_report))
 
+        self._complete_action_progress(self.progress_completed_text)
         QMessageBox.information(
             self,
             self.html_completed_title_text,
@@ -392,17 +438,21 @@ class MainWindow(QMainWindow):
         )
 
     def on_generate_png_cards(self) -> None:
+        self._start_action_progress(self.progress_cards_text)
         try:
-            summaries = self.card_generation_service.generate_all_albums(log=self._log)
+            summaries = self.card_generation_service.generate_all_albums(log=self._log, progress=self._update_progress)
         except FileNotFoundError as exc:
+            self._finish_action_progress()
             QMessageBox.warning(self, self.html_missing_title_text, str(exc))
             self._log(self.warning_log_text.format(error=exc))
             return
         except subprocess.CalledProcessError as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.external_tool_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
         except (OSError, RuntimeError) as exc:
+            self._finish_action_progress()
             QMessageBox.critical(self, self.error_title_text, self.cards_failed_text.format(error=exc))
             self._log(self.error_log_text.format(error=exc))
             return
@@ -419,6 +469,7 @@ class MainWindow(QMainWindow):
                 )
             )
 
+        self._complete_action_progress(self.progress_completed_text)
         QMessageBox.information(
             self,
             self.cards_completed_title_text,
@@ -432,3 +483,40 @@ class MainWindow(QMainWindow):
 
     def _log(self, message: str) -> None:
         self.log_output.append(message)
+
+    def _set_actions_enabled(self, enabled: bool) -> None:
+        for button in self.action_buttons:
+            button.setEnabled(enabled)
+
+    def _start_action_progress(self, label: str) -> None:
+        self._set_actions_enabled(False)
+        self.progress_label.setText(label)
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.progress_bar.setFormat("%v/%m (%p%)")
+        QApplication.processEvents()
+
+    def _update_progress(self, current: int, total: int, label: str) -> None:
+        safe_total = max(total, 1)
+        safe_value = min(max(current, 0), safe_total)
+        self.progress_label.setText(label)
+        self.progress_bar.setRange(0, safe_total)
+        self.progress_bar.setValue(safe_value)
+        self.progress_bar.setFormat("%v/%m (%p%)")
+        QApplication.processEvents()
+
+    def _complete_action_progress(self, label: str) -> None:
+        maximum = max(self.progress_bar.maximum(), 1)
+        self.progress_bar.setRange(0, maximum)
+        self.progress_bar.setValue(maximum)
+        self.progress_label.setText(label)
+        QApplication.processEvents()
+        self._set_actions_enabled(True)
+
+    def _finish_action_progress(self) -> None:
+        self.progress_label.setText(self.progress_idle_text)
+        self.progress_bar.setRange(0, 100)
+        self.progress_bar.setValue(0)
+        self.progress_bar.setFormat("%v/%m (%p%)")
+        self._set_actions_enabled(True)
+        QApplication.processEvents()

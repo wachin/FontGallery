@@ -113,3 +113,14 @@ def test_workspace_prepare_structure_fails_when_parent_is_not_writable(
         assert str(tmp_path) in str(exc)
     else:
         raise AssertionError("Expected workspace preparation to fail when the project root is not writable")
+
+
+def test_workspace_prepare_structure_reports_progress(tmp_path: Path) -> None:
+    workspace = WorkspaceService(tmp_path, language_code="es_ES")
+    progress_updates: list[tuple[int, int, str]] = []
+
+    workspace.prepare_structure(progress=lambda current, total, label: progress_updates.append((current, total, label)))
+
+    assert progress_updates
+    assert len(progress_updates) == len(workspace.required_directories)
+    assert progress_updates[-1][0] == progress_updates[-1][1]

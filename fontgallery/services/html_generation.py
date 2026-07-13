@@ -83,30 +83,68 @@ class HtmlGenerationService:
     def generate_all_albums(
         self,
         log: Callable[[str], None] | None = None,
+        progress: Callable[[int, int, str], None] | None = None,
     ) -> list[HtmlAlbumSummary]:
         def emit(message: str) -> None:
             if log is not None:
                 log(message)
 
         self.workspace.prepare_structure()
+        album_inputs = [
+            ("main", self.workspace.album_main_dir, self.workspace.album_main_extract_dir, False),
+            ("spanish", self.workspace.album_es_dir, self.workspace.album_es_extract_dir, True),
+            ("technical", self.workspace.album_tech_dir, self.workspace.album_tech_extract_dir, True),
+        ]
+        font_paths_by_label = {
+            label: self._collect_font_paths(source_dir)
+            for label, _, source_dir, _ in album_inputs
+        }
+        total = sum(len(paths) for paths in font_paths_by_label.values()) + len(album_inputs)
+        completed = 0
+
+        if progress is not None:
+            progress(
+                0,
+                total,
+                QCoreApplication.translate(
+                    "HtmlGenerationService",
+                    "Starting HTML generation for 3 albums",
+                ),
+            )
 
         summaries = [
-            self._generate_main_album(emit),
-            self._generate_spanish_album(emit),
-            self._generate_technical_album(emit),
+            self._generate_main_album(emit, font_paths_by_label["main"], progress, total, completed),
         ]
+        completed += len(font_paths_by_label["main"]) + 1
+        summaries.append(
+            self._generate_spanish_album(emit, font_paths_by_label["spanish"], progress, total, completed)
+        )
+        completed += len(font_paths_by_label["spanish"]) + 1
+        summaries.append(
+            self._generate_technical_album(emit, font_paths_by_label["technical"], progress, total, completed)
+        )
         return summaries
 
-    def _generate_main_album(self, emit: Callable[[str], None]) -> HtmlAlbumSummary:
+    def _generate_main_album(
+        self,
+        emit: Callable[[str], None],
+        font_paths: list[Path],
+        progress: Callable[[int, int, str], None] | None,
+        total: int,
+        completed_before: int,
+    ) -> HtmlAlbumSummary:
         output_dir = self.workspace.album_main_dir
-        source_dir = self.workspace.album_main_extract_dir
         html_path = self.workspace.album_main_html_path
         excluded_path = output_dir / "excluded-technical-fonts.txt"
 
         entries, excluded = self._collect_entries(
-            source_dir=source_dir,
             output_dir=output_dir,
             include_technical=False,
+            font_paths=font_paths,
+            progress=progress,
+            progress_total=total,
+            progress_offset=completed_before,
+            progress_label=QCoreApplication.translate("HtmlGenerationService", "Main album"),
         )
         title = QCoreApplication.translate("HtmlGenerationService", "Album of extracted fonts from .deb packages")
         intro = QCoreApplication.translate(
@@ -131,6 +169,15 @@ class HtmlGenerationService:
             for family, fullname, style, package, filename, reason in excluded
         )
         excluded_path.write_text("\n".join(excluded_lines), encoding="utf-8")
+        if progress is not None:
+            progress(
+                completed_before + len(font_paths) + 1,
+                total,
+                QCoreApplication.translate(
+                    "HtmlGenerationService",
+                    "Wrote HTML index for {label}",
+                ).format(label=QCoreApplication.translate("HtmlGenerationService", "Main album")),
+            )
         emit(
             QCoreApplication.translate(
                 "HtmlGenerationService",
@@ -145,15 +192,25 @@ class HtmlGenerationService:
             excluded_report=excluded_path,
         )
 
-    def _generate_spanish_album(self, emit: Callable[[str], None]) -> HtmlAlbumSummary:
+    def _generate_spanish_album(
+        self,
+        emit: Callable[[str], None],
+        font_paths: list[Path],
+        progress: Callable[[int, int, str], None] | None,
+        total: int,
+        completed_before: int,
+    ) -> HtmlAlbumSummary:
         output_dir = self.workspace.album_es_dir
-        source_dir = self.workspace.album_es_extract_dir
         html_path = self.workspace.album_es_html_path
 
         entries, excluded = self._collect_entries(
-            source_dir=source_dir,
             output_dir=output_dir,
             include_technical=True,
+            font_paths=font_paths,
+            progress=progress,
+            progress_total=total,
+            progress_offset=completed_before,
+            progress_label=QCoreApplication.translate("HtmlGenerationService", "Spanish album"),
         )
         title = QCoreApplication.translate("HtmlGenerationService", "Album of fonts with Spanish support")
         intro = QCoreApplication.translate(
@@ -168,6 +225,15 @@ class HtmlGenerationService:
             intro=intro,
             sample_text=DEFAULT_SAMPLE_TEXT,
         )
+        if progress is not None:
+            progress(
+                completed_before + len(font_paths) + 1,
+                total,
+                QCoreApplication.translate(
+                    "HtmlGenerationService",
+                    "Wrote HTML index for {label}",
+                ).format(label=QCoreApplication.translate("HtmlGenerationService", "Spanish album")),
+            )
         emit(
             QCoreApplication.translate(
                 "HtmlGenerationService",
@@ -181,15 +247,25 @@ class HtmlGenerationService:
             excluded_fonts=len(excluded),
         )
 
-    def _generate_technical_album(self, emit: Callable[[str], None]) -> HtmlAlbumSummary:
+    def _generate_technical_album(
+        self,
+        emit: Callable[[str], None],
+        font_paths: list[Path],
+        progress: Callable[[int, int, str], None] | None,
+        total: int,
+        completed_before: int,
+    ) -> HtmlAlbumSummary:
         output_dir = self.workspace.album_tech_dir
-        source_dir = self.workspace.album_tech_extract_dir
         html_path = self.workspace.album_tech_html_path
 
         entries, excluded = self._collect_entries(
-            source_dir=source_dir,
             output_dir=output_dir,
             include_technical=True,
+            font_paths=font_paths,
+            progress=progress,
+            progress_total=total,
+            progress_offset=completed_before,
+            progress_label=QCoreApplication.translate("HtmlGenerationService", "Technical album"),
         )
         title = QCoreApplication.translate("HtmlGenerationService", "Album of technical and mathematical fonts")
         intro = QCoreApplication.translate(
@@ -204,6 +280,15 @@ class HtmlGenerationService:
             intro=intro,
             sample_text=TECHNICAL_SAMPLE_TEXT,
         )
+        if progress is not None:
+            progress(
+                completed_before + len(font_paths) + 1,
+                total,
+                QCoreApplication.translate(
+                    "HtmlGenerationService",
+                    "Wrote HTML index for {label}",
+                ).format(label=QCoreApplication.translate("HtmlGenerationService", "Technical album")),
+            )
         emit(
             QCoreApplication.translate(
                 "HtmlGenerationService",
@@ -217,12 +302,7 @@ class HtmlGenerationService:
             excluded_fonts=len(excluded),
         )
 
-    def _collect_entries(
-        self,
-        source_dir: Path,
-        output_dir: Path,
-        include_technical: bool,
-    ) -> tuple[list[HtmlFontEntry], list[tuple[str, str, str, str, str, str]]]:
+    def _collect_font_paths(self, source_dir: Path) -> list[Path]:
         if not source_dir.exists():
             raise FileNotFoundError(
                 QCoreApplication.translate(
@@ -242,11 +322,23 @@ class HtmlGenerationService:
                     "No extracted fonts were found in: {path}",
                 ).format(path=source_dir)
             )
+        return font_paths
+
+    def _collect_entries(
+        self,
+        output_dir: Path,
+        include_technical: bool,
+        font_paths: list[Path],
+        progress: Callable[[int, int, str], None] | None,
+        progress_total: int,
+        progress_offset: int,
+        progress_label: str,
+    ) -> tuple[list[HtmlFontEntry], list[tuple[str, str, str, str, str, str]]]:
 
         entries: list[HtmlFontEntry] = []
         excluded: list[tuple[str, str, str, str, str, str]] = []
 
-        for font_path in font_paths:
+        for index, font_path in enumerate(font_paths, start=1):
             family, style, fullname = scan_font(font_path)
             package = font_path.parent.name
             is_technical = self._is_technical_font(
@@ -270,19 +362,27 @@ class HtmlGenerationService:
                         ),
                     )
                 )
-                continue
-
-            entries.append(
-                HtmlFontEntry(
-                    family=family,
-                    style=style,
-                    fullname=fullname,
-                    package=package,
-                    filename=font_path.name,
-                    path=font_path,
-                    relative_font_path=os.path.relpath(font_path, output_dir),
+            else:
+                entries.append(
+                    HtmlFontEntry(
+                        family=family,
+                        style=style,
+                        fullname=fullname,
+                        package=package,
+                        filename=font_path.name,
+                        path=font_path,
+                        relative_font_path=os.path.relpath(font_path, output_dir),
+                    )
                 )
-            )
+            if progress is not None:
+                progress(
+                    progress_offset + index,
+                    progress_total,
+                    QCoreApplication.translate(
+                        "HtmlGenerationService",
+                        "Indexed font {current}/{total_fonts} for {label}",
+                    ).format(current=index, total_fonts=len(font_paths), label=progress_label),
+                )
 
         entries.sort(
             key=lambda item: (

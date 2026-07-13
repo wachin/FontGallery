@@ -61,6 +61,7 @@ class CardGenerationService:
     def generate_all_albums(
         self,
         log: Callable[[str], None] | None = None,
+        progress: Callable[[int, int, str], None] | None = None,
     ) -> list[CardAlbumSummary]:
         def emit(message: str) -> None:
             if log is not None:
@@ -68,48 +69,86 @@ class CardGenerationService:
 
         self.workspace.prepare_structure()
         self._require_pillow()
-
-        return [
-            self._generate_album(
-                label="main",
-                source_dir=self.workspace.album_main_extract_dir,
-                output_dir=self.workspace.album_main_cards_dir,
-                sample_text=DEFAULT_SAMPLE_TEXT,
-                include_technical=False,
-                emit=emit,
+        album_specs = [
+            (
+                "main",
+                self.workspace.album_main_extract_dir,
+                self.workspace.album_main_cards_dir,
+                DEFAULT_SAMPLE_TEXT,
+                False,
+                QCoreApplication.translate("CardGenerationService", "Main album"),
             ),
-            self._generate_album(
-                label="spanish",
-                source_dir=self.workspace.album_es_extract_dir,
-                output_dir=self.workspace.album_es_cards_dir,
-                sample_text=DEFAULT_SAMPLE_TEXT,
-                include_technical=True,
-                emit=emit,
+            (
+                "spanish",
+                self.workspace.album_es_extract_dir,
+                self.workspace.album_es_cards_dir,
+                DEFAULT_SAMPLE_TEXT,
+                True,
+                QCoreApplication.translate("CardGenerationService", "Spanish album"),
             ),
-            self._generate_album(
-                label="technical",
-                source_dir=self.workspace.album_tech_extract_dir,
-                output_dir=self.workspace.album_tech_cards_dir,
-                sample_text=TECHNICAL_SAMPLE_TEXT,
-                include_technical=True,
-                emit=emit,
+            (
+                "technical",
+                self.workspace.album_tech_extract_dir,
+                self.workspace.album_tech_cards_dir,
+                TECHNICAL_SAMPLE_TEXT,
+                True,
+                QCoreApplication.translate("CardGenerationService", "Technical album"),
             ),
         ]
+        collected = [
+            (
+                label,
+                output_dir,
+                sample_text,
+                album_label,
+                *self._collect_entries(source_dir=source_dir, include_technical=include_technical),
+            )
+            for label, source_dir, output_dir, sample_text, include_technical, album_label in album_specs
+        ]
+        total = sum(len(entries) for _, _, _, _, entries, _ in collected)
+        completed = 0
+
+        if progress is not None:
+            progress(
+                0,
+                total,
+                QCoreApplication.translate(
+                    "CardGenerationService",
+                    "Starting PNG card generation",
+                ),
+            )
+
+        summaries: list[CardAlbumSummary] = []
+        for label, output_dir, sample_text, album_label, entries, excluded_fonts in collected:
+            summary = self._generate_album(
+                label=label,
+                output_dir=output_dir,
+                sample_text=sample_text,
+                emit=emit,
+                entries=entries,
+                excluded_fonts=excluded_fonts,
+                progress=progress,
+                progress_total=total,
+                progress_offset=completed,
+                progress_label=album_label,
+            )
+            summaries.append(summary)
+            completed += len(entries)
+        return summaries
 
     def _generate_album(
         self,
         label: str,
-        source_dir: Path,
         output_dir: Path,
         sample_text: str,
-        include_technical: bool,
         emit: Callable[[str], None],
+        entries: list[CardFontEntry],
+        excluded_fonts: int,
+        progress: Callable[[int, int, str], None] | None,
+        progress_total: int,
+        progress_offset: int,
+        progress_label: str,
     ) -> CardAlbumSummary:
-        entries, excluded_fonts = self._collect_entries(
-            source_dir=source_dir,
-            include_technical=include_technical,
-        )
-
         if output_dir.exists():
             shutil.rmtree(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -117,7 +156,7 @@ class CardGenerationService:
         render_errors = 0
         generated_cards = 0
 
-        for entry in entries:
+        for index, entry in enumerate(entries, start=1):
             package_dir = output_dir / entry.package
             package_dir.mkdir(parents=True, exist_ok=True)
             card_path = package_dir / f"{entry.path.stem}.png"
@@ -131,8 +170,17 @@ class CardGenerationService:
                         "Skipped card for {font} due to rendering error: {error}",
                     ).format(font=entry.filename, error=exc)
                 )
-                continue
-            generated_cards += 1
+            else:
+                generated_cards += 1
+            if progress is not None:
+                progress(
+                    progress_offset + index,
+                    progress_total,
+                    QCoreApplication.translate(
+                        "CardGenerationService",
+                        "Rendered card {current}/{total_cards} for {label}",
+                    ).format(current=index, total_cards=len(entries), label=progress_label),
+                )
 
         emit(
             QCoreApplication.translate(

@@ -81,6 +81,7 @@ class ExtractionService:
     def extract_to_main_album(
         self,
         log: Callable[[str], None] | None = None,
+        progress: Callable[[int, int, str], None] | None = None,
     ) -> tuple[ExtractionSummary, list[ExtractedFont]]:
         def emit(message: str) -> None:
             if log is not None:
@@ -104,8 +105,19 @@ class ExtractionService:
         extracted_fonts: list[ExtractedFont] = []
         duplicate_fonts_skipped = 0
         broken_fonts_skipped = 0
+        total = len(font_packages)
 
-        for package in font_packages:
+        if progress is not None:
+            progress(
+                0,
+                total,
+                QCoreApplication.translate(
+                    "ExtractionService",
+                    "Starting font extraction from {count} packages",
+                ).format(count=total),
+            )
+
+        for index, package in enumerate(font_packages, start=1):
             pkg_name = package_base_name(package)
             pkg_out_dir = extract_dir / pkg_name
             pkg_out_dir.mkdir(parents=True, exist_ok=True)
@@ -154,6 +166,15 @@ class ExtractionService:
                     "  Accumulated fonts: {count}",
                 ).format(count=len(extracted_fonts))
             )
+            if progress is not None:
+                progress(
+                    index,
+                    total,
+                    QCoreApplication.translate(
+                        "ExtractionService",
+                        "Processed package {current}/{total}: {package}",
+                    ).format(current=index, total=total, package=pkg_name),
+                )
 
         extracted_fonts.sort(
             key=lambda item: (
