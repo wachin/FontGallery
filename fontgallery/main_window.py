@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import subprocess
+from pathlib import Path
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
@@ -55,6 +56,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(self.window_title_text)
         self.resize(980, 700)
         self._build_ui()
+        self._recompute_step_states()
         self.refresh_status()
 
     def _init_texts(self) -> None:
@@ -290,6 +292,7 @@ class MainWindow(QMainWindow):
         return box
 
     def refresh_status(self) -> None:
+        self._recompute_step_states()
         statuses = self.workspace.path_status()
         for item in statuses:
             key = str(item["key"])
@@ -565,6 +568,49 @@ class MainWindow(QMainWindow):
         for step_key in step_keys:
             self.step_states[step_key] = "pending"
         self._refresh_step_button_styles()
+
+    def _recompute_step_states(self) -> None:
+        states = {
+            "prepare": self._is_workspace_prepared(),
+            "extract": self._has_generated_files(self.workspace.album_main_extract_dir),
+            "analyze": (
+                self._has_generated_files(self.workspace.album_es_extract_dir)
+                or self._has_generated_files(self.workspace.album_tech_extract_dir)
+            ),
+            "html": self._has_generated_html_outputs(),
+            "cards": self._has_generated_card_outputs(),
+        }
+        for step_key, is_completed in states.items():
+            self.step_states[step_key] = "completed" if is_completed else "pending"
+        self._refresh_step_button_styles()
+
+    def _is_workspace_prepared(self) -> bool:
+        return all(item.path.exists() and item.path.is_dir() for item in self.workspace.required_directories)
+
+    def _has_generated_html_outputs(self) -> bool:
+        return any(
+            html_path.exists() and html_path.is_file()
+            for html_path in (
+                self.workspace.album_main_html_path,
+                self.workspace.album_es_html_path,
+                self.workspace.album_tech_html_path,
+            )
+        )
+
+    def _has_generated_card_outputs(self) -> bool:
+        return any(
+            self._has_generated_files(cards_dir)
+            for cards_dir in (
+                self.workspace.album_main_cards_dir,
+                self.workspace.album_es_cards_dir,
+                self.workspace.album_tech_cards_dir,
+            )
+        )
+
+    def _has_generated_files(self, directory: Path) -> bool:
+        if not directory.exists() or not directory.is_dir():
+            return False
+        return any(path.is_file() for path in directory.rglob("*"))
 
     def _refresh_step_button_styles(self) -> None:
         styles = {
