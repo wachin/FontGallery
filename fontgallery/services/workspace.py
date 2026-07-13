@@ -99,6 +99,15 @@ class WorkspaceService:
         ]
 
     @property
+    def status_paths(self) -> list[ManagedPath]:
+        return [
+            *self.managed_paths,
+            ManagedPath("album_main_cards", "Main cards", self.album_main_cards_dir),
+            ManagedPath("album_es_cards", "Spanish cards", self.album_es_cards_dir),
+            ManagedPath("album_tech_cards", "Technical cards", self.album_tech_cards_dir),
+        ]
+
+    @property
     def required_directories(self) -> list[ManagedPath]:
         return [
             *self.managed_paths,
@@ -209,7 +218,7 @@ class WorkspaceService:
 
     def path_status(self) -> list[dict[str, str | bool]]:
         statuses: list[dict[str, str | bool]] = []
-        for item in self.managed_paths:
+        for item in self.status_paths:
             statuses.append(
                 {
                     "key": item.key,

@@ -124,3 +124,13 @@ def test_workspace_prepare_structure_reports_progress(tmp_path: Path) -> None:
     assert progress_updates
     assert len(progress_updates) == len(workspace.required_directories)
     assert progress_updates[-1][0] == progress_updates[-1][1]
+
+
+def test_workspace_status_includes_card_directories(tmp_path: Path) -> None:
+    workspace = WorkspaceService(tmp_path, language_code="es_ES")
+
+    status_by_key = {item["key"]: item for item in workspace.path_status()}
+
+    assert "album_main_cards" in status_by_key
+    assert "album_es_cards" in status_by_key
+    assert "album_tech_cards" in status_by_key

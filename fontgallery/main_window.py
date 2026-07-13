@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QTabWidget,
     QTextEdit,
     QVBoxLayout,
     QWidget,
@@ -57,6 +58,8 @@ class MainWindow(QMainWindow):
         self.workspace_group_text = self.tr("Workspace Status")
         self.actions_group_text = self.tr("Primary Actions")
         self.log_group_text = self.tr("Log")
+        self.workspace_tab_text = self.tr("Workspace")
+        self.log_tab_text = self.tr("Log")
         self.base_folder_text = self.tr("Base folder")
         self.column_item_text = self.tr("Item")
         self.column_path_text = self.tr("Path")
@@ -67,6 +70,9 @@ class MainWindow(QMainWindow):
             "album_main": self.tr("Main album"),
             "album_es": self.tr("Spanish album"),
             "album_tech": self.tr("Technical album"),
+            "album_main_cards": self.tr("Main cards"),
+            "album_es_cards": self.tr("Spanish cards"),
+            "album_tech_cards": self.tr("Technical cards"),
         }
         self.album_labels_text = {
             "main": self.tr("Main album"),
@@ -164,11 +170,22 @@ class MainWindow(QMainWindow):
         subtitle.setStyleSheet("color: #444; font-size: 14px;")
         root_layout.addWidget(subtitle)
 
-        root_layout.addWidget(self._build_workspace_box())
-        root_layout.addWidget(self._build_actions_box())
-        root_layout.addWidget(self._build_log_box(), 1)
+        tabs = QTabWidget()
+        tabs.addTab(self._build_workspace_tab(), self.workspace_tab_text)
+        tabs.addTab(self._build_log_box(), self.log_tab_text)
+        root_layout.addWidget(tabs, 1)
 
         self.setCentralWidget(central)
+
+    def _build_workspace_tab(self) -> QWidget:
+        tab = QWidget()
+        layout = QVBoxLayout(tab)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(14)
+        layout.addWidget(self._build_workspace_box())
+        layout.addWidget(self._build_actions_box())
+        layout.addStretch(1)
+        return tab
 
     def _build_workspace_box(self) -> QGroupBox:
         box = QGroupBox(self.workspace_group_text)
@@ -187,7 +204,7 @@ class MainWindow(QMainWindow):
         grid.addWidget(QLabel(self.column_status_text), 0, 2)
         grid.addWidget(QLabel(self.column_write_text), 0, 3)
 
-        for row, item in enumerate(self.workspace.managed_paths, start=1):
+        for row, item in enumerate(self.workspace.status_paths, start=1):
             label = QLabel(self.path_labels_text.get(item.key, item.label))
             path_label = QLabel(str(item.path))
             path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
