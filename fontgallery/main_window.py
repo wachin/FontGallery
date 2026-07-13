@@ -4,8 +4,10 @@ import subprocess
 from pathlib import Path
 
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import (
     QApplication,
+    QDialog,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
@@ -55,9 +57,21 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle(self.window_title_text)
         self.resize(980, 700)
+        self._build_menu()
         self._build_ui()
         self._recompute_step_states()
         self.refresh_status()
+
+    def _build_menu(self) -> None:
+        file_menu = self.menuBar().addMenu(self.file_menu_text)
+        exit_action = QAction(self.exit_action_text, self)
+        exit_action.triggered.connect(self.close)
+        file_menu.addAction(exit_action)
+
+        help_menu = self.menuBar().addMenu(self.help_menu_text)
+        about_action = QAction(self.about_action_text, self)
+        about_action.triggered.connect(self.on_show_about)
+        help_menu.addAction(about_action)
 
     def _init_texts(self) -> None:
         self.window_title_text = self.tr("FontGallery")
@@ -112,6 +126,16 @@ class MainWindow(QMainWindow):
         self.package_count_text = self.tr("Detected .deb packages in '{folder}': {count}")
         self.error_title_text = self.tr("Error")
         self.warning_title_text = self.tr("Warning")
+        self.file_menu_text = self.tr("File")
+        self.help_menu_text = self.tr("Help")
+        self.exit_action_text = self.tr("Exit")
+        self.about_action_text = self.tr("About...")
+        self.about_title_text = self.tr("About FontGallery")
+        self.about_description_text = self.tr(
+            "Desktop application for GNU/Linux that extracts fonts from .deb packages and builds visual HTML and PNG font albums."
+        )
+        self.about_technologies_title_text = self.tr("Technologies used")
+        self.about_technologies_text = self.tr("Python 3, PyQt6, Pillow, Fontconfig, dpkg")
         self.workspace_ready_title_text = self.tr("Workspace ready")
         self.workspace_ready_message_text = self.tr("The base workspace structure was verified successfully.")
         self.created_folder_log_text = self.tr("Created folder: {path}")
@@ -547,6 +571,48 @@ class MainWindow(QMainWindow):
                 )
             ),
         )
+
+    def on_show_about(self) -> None:
+        dialog = QDialog(self)
+        dialog.setWindowTitle(self.about_title_text)
+        dialog.setModal(True)
+        dialog.resize(760, 360)
+
+        layout = QHBoxLayout(dialog)
+        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setSpacing(24)
+
+        icon_label = QLabel()
+        icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        icon = self.windowIcon()
+        if not icon.isNull():
+            icon_label.setPixmap(icon.pixmap(220, 220))
+        icon_label.setMinimumWidth(240)
+        layout.addWidget(icon_label, 0, Qt.AlignmentFlag.AlignCenter)
+
+        info_label = QLabel(
+            "<div>"
+            "<p><b>FontGallery</b></p>"
+            f"<p>{self.about_description_text}</p>"
+            "<p>"
+            "Copyright: © 2026 Washington Indacochea Delgado<br/>"
+            "Correo: <a href=\"mailto:linuxfrontier@proton.me\">linuxfrontier@proton.me</a><br/>"
+            "Licencia: GPL3<br/>"
+            "Página Web: <a href=\"https://github.com/wachin/FontGallery\">https://github.com/wachin/FontGallery</a>"
+            "</p>"
+            f"<p><b>{self.about_technologies_title_text}</b><br/>{self.about_technologies_text}</p>"
+            "</div>"
+        )
+        info_label.setWordWrap(True)
+        info_label.setTextFormat(Qt.TextFormat.RichText)
+        info_label.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextBrowserInteraction | Qt.TextInteractionFlag.LinksAccessibleByMouse
+        )
+        info_label.setOpenExternalLinks(True)
+        info_label.setMinimumWidth(420)
+        layout.addWidget(info_label, 1)
+
+        dialog.exec()
 
     def _log(self, message: str) -> None:
         self.log_output.append(message)

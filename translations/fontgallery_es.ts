@@ -231,247 +231,287 @@
   <context>
     <name>MainWindow</name>
     <message>
-      <location filename="../fontgallery/main_window.py" line="64" />
-      <location filename="../fontgallery/main_window.py" line="63" />
+      <location filename="../fontgallery/main_window.py" line="78" />
+      <location filename="../fontgallery/main_window.py" line="77" />
       <source>FontGallery</source>
       <translation>FontGallery</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="65" />
+      <location filename="../fontgallery/main_window.py" line="79" />
       <source>Tool for preparing a workspace and automating visual font albums from .deb packages.</source>
       <translation>Herramienta para preparar un espacio de trabajo y automatizar álbumes visuales de fuentes desde paquetes .deb.</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="68" />
+      <location filename="../fontgallery/main_window.py" line="82" />
       <source>Workspace Status</source>
       <translation>Estado del espacio de trabajo</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="69" />
+      <location filename="../fontgallery/main_window.py" line="83" />
       <source>Primary Actions</source>
       <translation>Acciones principales</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="72" />
-      <location filename="../fontgallery/main_window.py" line="70" />
+      <location filename="../fontgallery/main_window.py" line="86" />
+      <location filename="../fontgallery/main_window.py" line="84" />
       <source>Log</source>
       <translation>Registro</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="71" />
+      <location filename="../fontgallery/main_window.py" line="85" />
       <source>Workspace</source>
       <translation>Espacio de trabajo</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="73" />
+      <location filename="../fontgallery/main_window.py" line="87" />
       <source>Base folder</source>
       <translation>Carpeta base</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="74" />
+      <location filename="../fontgallery/main_window.py" line="88" />
       <source>Item</source>
       <translation>Elemento</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="75" />
+      <location filename="../fontgallery/main_window.py" line="89" />
       <source>Path</source>
       <translation>Ruta</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="76" />
+      <location filename="../fontgallery/main_window.py" line="90" />
       <source>Status</source>
       <translation>Estado</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="77" />
+      <location filename="../fontgallery/main_window.py" line="91" />
       <source>Write access</source>
       <translation>Acceso de escritura</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="79" />
+      <location filename="../fontgallery/main_window.py" line="93" />
       <source>Packages</source>
       <translation>Paquetes</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="88" />
-      <location filename="../fontgallery/main_window.py" line="80" />
+      <location filename="../fontgallery/main_window.py" line="102" />
+      <location filename="../fontgallery/main_window.py" line="94" />
       <source>Main album</source>
       <translation>Álbum principal</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="89" />
-      <location filename="../fontgallery/main_window.py" line="81" />
+      <location filename="../fontgallery/main_window.py" line="103" />
+      <location filename="../fontgallery/main_window.py" line="95" />
       <source>Spanish album</source>
       <translation>Álbum en español</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="90" />
-      <location filename="../fontgallery/main_window.py" line="82" />
+      <location filename="../fontgallery/main_window.py" line="104" />
+      <location filename="../fontgallery/main_window.py" line="96" />
       <source>Technical album</source>
       <translation>Álbum técnico</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="83" />
+      <location filename="../fontgallery/main_window.py" line="97" />
       <source>Main cards</source>
       <translation>Tarjetas principales</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="84" />
+      <location filename="../fontgallery/main_window.py" line="98" />
       <source>Spanish cards</source>
       <translation>Tarjetas en español</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="85" />
+      <location filename="../fontgallery/main_window.py" line="99" />
       <source>Technical cards</source>
       <translation>Tarjetas técnicas</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="92" />
+      <location filename="../fontgallery/main_window.py" line="106" />
       <source>1. Prepare workspace</source>
       <translation>1. Preparar espacio de trabajo</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="93" />
+      <location filename="../fontgallery/main_window.py" line="107" />
       <source>2. Extract all fonts to the main album</source>
       <translation>2. Extraer todas las fuentes al álbum principal</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="94" />
+      <location filename="../fontgallery/main_window.py" line="108" />
       <source>3. Analyze and classify the master collection</source>
       <translation>3. Analizar y clasificar la colección maestra</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="95" />
+      <location filename="../fontgallery/main_window.py" line="109" />
       <source>4. Generate HTML indexes</source>
       <translation>4. Generar índices HTML</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="96" />
+      <location filename="../fontgallery/main_window.py" line="110" />
       <source>5. Generate PNG cards</source>
       <translation>5. Generar tarjetas PNG</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="97" />
+      <location filename="../fontgallery/main_window.py" line="111" />
       <source>Refresh status</source>
       <translation>Actualizar estado</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="98" />
+      <location filename="../fontgallery/main_window.py" line="112" />
       <source>Ready.</source>
       <translation>Listo.</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="99" />
+      <location filename="../fontgallery/main_window.py" line="113" />
       <source>Preparing workspace...</source>
       <translation>Preparando espacio de trabajo...</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="100" />
+      <location filename="../fontgallery/main_window.py" line="114" />
       <source>Extracting fonts...</source>
       <translation>Extrayendo fuentes...</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="101" />
+      <location filename="../fontgallery/main_window.py" line="115" />
       <source>Analyzing master collection...</source>
       <translation>Analizando colección maestra...</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="102" />
+      <location filename="../fontgallery/main_window.py" line="116" />
       <source>Generating HTML indexes...</source>
       <translation>Generando índices HTML...</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="103" />
+      <location filename="../fontgallery/main_window.py" line="117" />
       <source>Generating PNG cards...</source>
       <translation>Generando tarjetas PNG...</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="104" />
+      <location filename="../fontgallery/main_window.py" line="118" />
       <source>Completed.</source>
       <translation>Completado.</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="105" />
+      <location filename="../fontgallery/main_window.py" line="119" />
       <source>Pending step</source>
       <translation>Paso pendiente</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="106" />
+      <location filename="../fontgallery/main_window.py" line="120" />
       <source>Step in progress</source>
       <translation>Paso en ejecución</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="107" />
+      <location filename="../fontgallery/main_window.py" line="121" />
       <source>Completed and current step</source>
       <translation>Paso completado y vigente</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="108" />
+      <location filename="../fontgallery/main_window.py" line="122" />
       <source>Exists</source>
       <translation>Existe</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="109" />
+      <location filename="../fontgallery/main_window.py" line="123" />
       <source>Missing</source>
       <translation>No existe</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="110" />
+      <location filename="../fontgallery/main_window.py" line="124" />
       <source>Writable</source>
       <translation>Con escritura</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="111" />
+      <location filename="../fontgallery/main_window.py" line="125" />
       <source>Not writable</source>
       <translation>Sin escritura</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="112" />
+      <location filename="../fontgallery/main_window.py" line="126" />
       <source>Detected .deb packages in '{folder}': {count}</source>
       <translation>Paquetes .deb detectados en '{folder}': {count}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="113" />
+      <location filename="../fontgallery/main_window.py" line="127" />
       <source>Error</source>
       <translation>Error</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="114" />
+      <location filename="../fontgallery/main_window.py" line="128" />
       <source>Warning</source>
       <translation>Aviso</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="115" />
+      <location filename="../fontgallery/main_window.py" line="129" />
+      <source>File</source>
+      <translation>Archivo</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="130" />
+      <source>Help</source>
+      <translation>Ayuda</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="131" />
+      <source>Exit</source>
+      <translation>Salir</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="132" />
+      <source>About...</source>
+      <translation>Acerca de...</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="133" />
+      <source>About FontGallery</source>
+      <translation>Acerca de FontGallery</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="134" />
+      <source>Desktop application for GNU/Linux that extracts fonts from .deb packages and builds visual HTML and PNG font albums.</source>
+      <translation>Aplicación de escritorio para GNU/Linux que extrae fuentes desde paquetes .deb y construye álbumes visuales de fuentes en HTML y PNG.</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="137" />
+      <source>Technologies used</source>
+      <translation>Tecnologías usadas</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="138" />
+      <source>Python 3, PyQt6, Pillow, Fontconfig, dpkg</source>
+      <translation>Python 3, PyQt6, Pillow, Fontconfig, dpkg</translation>
+    </message>
+    <message>
+      <location filename="../fontgallery/main_window.py" line="139" />
       <source>Workspace ready</source>
       <translation>Espacio de trabajo listo</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="116" />
+      <location filename="../fontgallery/main_window.py" line="140" />
       <source>The base workspace structure was verified successfully.</source>
       <translation>La estructura base del espacio de trabajo fue verificada correctamente.</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="117" />
+      <location filename="../fontgallery/main_window.py" line="141" />
       <source>Created folder: {path}</source>
       <translation>Carpeta creada: {path}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="118" />
+      <location filename="../fontgallery/main_window.py" line="142" />
       <source>No folders needed to be created. The workspace already existed.</source>
       <translation>No fue necesario crear carpetas. El espacio de trabajo ya existía.</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="119" />
+      <location filename="../fontgallery/main_window.py" line="143" />
       <source>No packages</source>
       <translation>Sin paquetes</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="120" />
+      <location filename="../fontgallery/main_window.py" line="144" />
       <source>Extraction completed</source>
       <translation>Extracción completada</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="121" />
+      <location filename="../fontgallery/main_window.py" line="145" />
       <source>Extraction into the main album finished.
 
 Unique fonts: {unique}
@@ -484,27 +524,27 @@ Duplicadas omitidas: {duplicates}
 Fuentes dañadas omitidas: {broken}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="127" />
+      <location filename="../fontgallery/main_window.py" line="151" />
       <source>Extraction summary: packages seen={seen}, font packages={font_packages}, unique fonts={unique}, skipped duplicates={duplicates}, skipped broken={broken}</source>
       <translation>Resumen de extracción: paquetes vistos={seen}, paquetes de fuentes={font_packages}, fuentes únicas={unique}, duplicadas omitidas={duplicates}, dañadas omitidas={broken}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="131" />
+      <location filename="../fontgallery/main_window.py" line="155" />
       <source>Extraction directory: {path}</source>
       <translation>Directorio de extracción: {path}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="132" />
+      <location filename="../fontgallery/main_window.py" line="156" />
       <source>Missing master collection</source>
       <translation>Falta la colección maestra</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="133" />
+      <location filename="../fontgallery/main_window.py" line="157" />
       <source>Analysis completed</source>
       <translation>Análisis completado</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="134" />
+      <location filename="../fontgallery/main_window.py" line="158" />
       <source>The master collection was analyzed and classified.
 
 Total fonts: {total}
@@ -521,22 +561,22 @@ Copiadas al álbum en español: {copied_spanish}
 Copiadas al álbum técnico: {copied_technical}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="142" />
+      <location filename="../fontgallery/main_window.py" line="166" />
       <source>Analysis summary: total={total}, with Spanish support={spanish}, technical={technical}, copied to Spanish={copied_spanish}, copied to technical={copied_technical}</source>
       <translation>Resumen de análisis: total={total}, con soporte para español={spanish}, técnicas={technical}, copiadas a español={copied_spanish}, copiadas a técnico={copied_technical}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="146" />
+      <location filename="../fontgallery/main_window.py" line="170" />
       <source>Missing extracted fonts</source>
       <translation>Faltan fuentes extraídas</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="147" />
+      <location filename="../fontgallery/main_window.py" line="171" />
       <source>HTML generation completed</source>
       <translation>Generación HTML completada</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="148" />
+      <location filename="../fontgallery/main_window.py" line="172" />
       <source>The HTML font albums were generated successfully.
 
 {details}</source>
@@ -545,12 +585,12 @@ Copiadas al álbum técnico: {copied_technical}</translation>
 {details}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="151" />
+      <location filename="../fontgallery/main_window.py" line="175" />
       <source>PNG card generation completed</source>
       <translation>Generación de tarjetas PNG completada</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="152" />
+      <location filename="../fontgallery/main_window.py" line="176" />
       <source>The PNG font cards were generated successfully.
 
 {details}</source>
@@ -559,69 +599,69 @@ Copiadas al álbum técnico: {copied_technical}</translation>
 {details}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="155" />
+      <location filename="../fontgallery/main_window.py" line="179" />
       <source>HTML album '{label}': included={included}, excluded={excluded}, path={path}</source>
       <translation>Álbum HTML '{label}': incluidas={included}, excluidas={excluded}, ruta={path}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="158" />
+      <location filename="../fontgallery/main_window.py" line="182" />
       <source>PNG cards '{label}': generated={generated}, excluded={excluded}, render errors={errors}, path={path}</source>
       <translation>Tarjetas PNG '{label}': generadas={generated}, excluidas={excluded}, errores de renderizado={errors}, ruta={path}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="161" />
+      <location filename="../fontgallery/main_window.py" line="185" />
       <source>Exclusion report: {path}</source>
       <translation>Reporte de exclusión: {path}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="162" />
+      <location filename="../fontgallery/main_window.py" line="186" />
       <source>An external tool failed:
 {error}</source>
       <translation>Falló una herramienta externa:
 {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="163" />
+      <location filename="../fontgallery/main_window.py" line="187" />
       <source>Could not prepare the workspace:
 {error}</source>
       <translation>No se pudo preparar el espacio de trabajo:
 {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="164" />
+      <location filename="../fontgallery/main_window.py" line="188" />
       <source>Could not extract the fonts:
 {error}</source>
       <translation>No se pudieron extraer las fuentes:
 {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="165" />
+      <location filename="../fontgallery/main_window.py" line="189" />
       <source>Could not analyze the collection:
 {error}</source>
       <translation>No se pudo analizar la colección:
 {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="166" />
+      <location filename="../fontgallery/main_window.py" line="190" />
       <source>Could not generate HTML indexes:
 {error}</source>
       <translation>No se pudieron generar los índices HTML:
 {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="167" />
+      <location filename="../fontgallery/main_window.py" line="191" />
       <source>Could not generate PNG cards:
 {error}</source>
       <translation>No se pudieron generar las tarjetas PNG:
 {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="168" />
+      <location filename="../fontgallery/main_window.py" line="192" />
       <source>ERROR: {error}</source>
       <translation>ERROR: {error}</translation>
     </message>
     <message>
-      <location filename="../fontgallery/main_window.py" line="169" />
+      <location filename="../fontgallery/main_window.py" line="193" />
       <source>WARNING: {error}</source>
       <translation>AVISO: {error}</translation>
     </message>
