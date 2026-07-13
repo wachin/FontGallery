@@ -102,6 +102,9 @@ class MainWindow(QMainWindow):
         self.progress_html_text = self.tr("Generating HTML indexes...")
         self.progress_cards_text = self.tr("Generating PNG cards...")
         self.progress_completed_text = self.tr("Completed.")
+        self.legend_pending_text = self.tr("Pending step")
+        self.legend_active_text = self.tr("Step in progress")
+        self.legend_completed_text = self.tr("Completed and current step")
         self.exists_text = self.tr("Exists")
         self.missing_text = self.tr("Missing")
         self.writable_text = self.tr("Writable")
@@ -281,8 +284,36 @@ class MainWindow(QMainWindow):
         self.progress_bar.setFormat("%v/%m (%p%)")
         layout.addWidget(self.progress_label)
         layout.addWidget(self.progress_bar)
+        layout.addLayout(self._build_step_legend())
         self._refresh_step_button_styles()
         return box
+
+    def _build_step_legend(self) -> QHBoxLayout:
+        layout = QHBoxLayout()
+        layout.setSpacing(18)
+        layout.addWidget(self._build_legend_item("#f3f4f6", "#cfd4dc", self.legend_pending_text))
+        layout.addWidget(self._build_legend_item("#dbeafe", "#7aa2e3", self.legend_active_text))
+        layout.addWidget(self._build_legend_item("#dcfce7", "#7ecb99", self.legend_completed_text))
+        layout.addStretch(1)
+        return layout
+
+    def _build_legend_item(self, fill_color: str, border_color: str, text: str) -> QWidget:
+        widget = QWidget()
+        layout = QHBoxLayout(widget)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+
+        swatch = QLabel()
+        swatch.setFixedSize(28, 18)
+        swatch.setStyleSheet(
+            f"background-color: {fill_color}; border: 1px solid {border_color}; border-radius: 4px;"
+        )
+        layout.addWidget(swatch)
+
+        text_label = QLabel(text)
+        text_label.setStyleSheet("color: #4b5563;")
+        layout.addWidget(text_label)
+        return widget
 
     def _build_log_box(self) -> QGroupBox:
         box = QGroupBox(self.log_group_text)
