@@ -26,6 +26,7 @@ On Debian-based systems, large font collections often arrive as package files. T
 ## Current Features
 
 - Desktop GUI built with `PyQt6`.
+- Two main GUI tabs: `Workspace` and `Log`.
 - Localized workspace naming for English and Spanish environments.
 - Extraction of fonts from `.deb` packages using `dpkg-deb -x`.
 - Duplicate detection by `SHA256`.
@@ -34,6 +35,7 @@ On Debian-based systems, large font collections often arrive as package files. T
 - Derived Spanish-capable and technical sub-albums.
 - HTML album generation for the three current collections.
 - PNG card generation for the three current collections.
+- Per-action progress bar in the GUI for workspace preparation, extraction, analysis, HTML generation, and PNG card generation.
 - Qt translation loading for English and Spanish.
 - Automated tests for workspace, translations, and card generation.
 
@@ -159,6 +161,13 @@ Click `Prepare workspace`.
 
 This creates or verifies the main working folders. Depending on locale and existing workspace state, the application uses English or Spanish folder names while preserving compatibility with older Spanish workspaces.
 
+The `Workspace` tab contains:
+
+- `Workspace Status`: shows the main workspace paths, their existence status, and write access.
+- `Primary Actions`: contains the main workflow buttons and a progress bar that advances while each action runs.
+
+The `Log` tab contains the built-in execution log.
+
 ### 3. Add `.deb` packages
 
 Put your font packages into:
@@ -230,6 +239,12 @@ Current album structure in a Spanish workspace:
 
 Equivalent English folder names are also supported for new English-localized workspaces.
 
+The `Workspace Status` table also shows the card output directories explicitly so you can verify their `Status` and `Write access` before generating PNG cards:
+
+- `album-fuentes/tarjetas-fuentes`
+- `album-fuentes-espanol/tarjetas-fuentes-espanol`
+- `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas`
+
 ## Tests
 
 Tests live in `tests/`.
@@ -280,7 +295,7 @@ Service-oriented modules currently in use:
 - `HtmlGenerationService`: HTML album generation.
 - `CardGenerationService`: PNG card generation.
 
-The GUI in `fontgallery/main_window.py` orchestrates those services and shows progress in its built-in log panel.
+The GUI in `fontgallery/main_window.py` orchestrates those services, shows per-action progress in the `Workspace` tab, and keeps the execution log in the separate `Log` tab.
 
 ## Roadmap
 
