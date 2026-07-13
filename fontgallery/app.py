@@ -42,5 +42,5 @@ def main() -> int:
     if icon_path.exists():
         window.setWindowIcon(QIcon(str(icon_path)))
     window._translator = translator  # Keep translator alive for the lifetime of the application.
-    window.show()
+    window.showMaximized()
     return app.exec()
