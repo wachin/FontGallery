@@ -79,11 +79,11 @@ class MainWindow(QMainWindow):
             "spanish": self.tr("Spanish album"),
             "technical": self.tr("Technical album"),
         }
-        self.prepare_button_text = self.tr("Prepare workspace")
-        self.extract_button_text = self.tr("Extract all fonts to the main album")
-        self.analyze_button_text = self.tr("Analyze and classify the master collection")
-        self.html_button_text = self.tr("Generate HTML indexes")
-        self.cards_button_text = self.tr("Generate PNG cards")
+        self.prepare_button_text = self.tr("1. Prepare workspace")
+        self.extract_button_text = self.tr("2. Extract all fonts to the main album")
+        self.analyze_button_text = self.tr("3. Analyze and classify the master collection")
+        self.html_button_text = self.tr("4. Generate HTML indexes")
+        self.cards_button_text = self.tr("5. Generate PNG cards")
         self.refresh_button_text = self.tr("Refresh status")
         self.progress_idle_text = self.tr("Ready.")
         self.progress_prepare_text = self.tr("Preparing workspace...")

@@ -327,27 +327,27 @@
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="82" />
-      <source>Prepare workspace</source>
+      <source>1. Prepare workspace</source>
       <translation type="unfinished" />
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="83" />
-      <source>Extract all fonts to the main album</source>
+      <source>2. Extract all fonts to the main album</source>
       <translation type="unfinished" />
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="84" />
-      <source>Analyze and classify the master collection</source>
+      <source>3. Analyze and classify the master collection</source>
       <translation type="unfinished" />
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="85" />
-      <source>Generate HTML indexes</source>
+      <source>4. Generate HTML indexes</source>
       <translation type="unfinished" />
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="86" />
-      <source>Generate PNG cards</source>
+      <source>5. Generate PNG cards</source>
       <translation type="unfinished" />
     </message>
     <message>

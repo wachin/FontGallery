@@ -327,28 +327,28 @@
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="82" />
-      <source>Prepare workspace</source>
-      <translation>Preparar espacio de trabajo</translation>
+      <source>1. Prepare workspace</source>
+      <translation>1. Preparar espacio de trabajo</translation>
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="83" />
-      <source>Extract all fonts to the main album</source>
-      <translation>Extraer todas las fuentes al álbum principal</translation>
+      <source>2. Extract all fonts to the main album</source>
+      <translation>2. Extraer todas las fuentes al álbum principal</translation>
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="84" />
-      <source>Analyze and classify the master collection</source>
-      <translation>Analizar y clasificar la colección maestra</translation>
+      <source>3. Analyze and classify the master collection</source>
+      <translation>3. Analizar y clasificar la colección maestra</translation>
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="85" />
-      <source>Generate HTML indexes</source>
-      <translation>Generar índices HTML</translation>
+      <source>4. Generate HTML indexes</source>
+      <translation>4. Generar índices HTML</translation>
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="86" />
-      <source>Generate PNG cards</source>
-      <translation>Generar tarjetas PNG</translation>
+      <source>5. Generate PNG cards</source>
+      <translation>5. Generar tarjetas PNG</translation>
     </message>
     <message>
       <location filename="../fontgallery/main_window.py" line="87" />
@@ -609,6 +609,26 @@ Copiadas al álbum técnico: {copied_technical}</translation>
       <location filename="../fontgallery/main_window.py" line="156" />
       <source>WARNING: {error}</source>
       <translation>AVISO: {error}</translation>
+    </message>
+    <message>
+      <source>Prepare workspace</source>
+      <translation type="vanished">Preparar espacio de trabajo</translation>
+    </message>
+    <message>
+      <source>Extract all fonts to the main album</source>
+      <translation type="vanished">Extraer todas las fuentes al álbum principal</translation>
+    </message>
+    <message>
+      <source>Analyze and classify the master collection</source>
+      <translation type="vanished">Analizar y clasificar la colección maestra</translation>
+    </message>
+    <message>
+      <source>Generate HTML indexes</source>
+      <translation type="vanished">Generar índices HTML</translation>
+    </message>
+    <message>
+      <source>Generate PNG cards</source>
+      <translation type="vanished">Generar tarjetas PNG</translation>
     </message>
   </context>
   <context>
