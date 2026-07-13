@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 from PyQt6.QtCore import QLocale, QTranslator
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication
 
 from .main_window import MainWindow
@@ -31,10 +32,15 @@ def main() -> int:
     app.setOrganizationName("FontGallery")
 
     project_root = Path.cwd()
+    icon_path = project_root / "assets" / "icons" / "fontgallery.svg"
+    if icon_path.exists():
+        app.setWindowIcon(QIcon(str(icon_path)))
     locale_name = QLocale.system().name()
     translator = load_translator(app, project_root, locale_name)
     workspace = WorkspaceService(project_root, language_code=locale_name)
     window = MainWindow(workspace)
+    if icon_path.exists():
+        window.setWindowIcon(QIcon(str(icon_path)))
     window._translator = translator  # Keep translator alive for the lifetime of the application.
     window.show()
     return app.exec()

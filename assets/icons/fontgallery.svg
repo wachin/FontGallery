@@ -1,83 +1,82 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" version="1.1">
   <defs>
-    <linearGradient id="bgGradient" x1="72" y1="56" x2="440" y2="456" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#14324c"/>
-      <stop offset="0.52" stop-color="#1d5f78"/>
-      <stop offset="1" stop-color="#2b9d89"/>
+    <linearGradient id="cardBackLeft" x1="96" y1="92" x2="356" y2="408" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#b8d8ff"/>
+      <stop offset="1" stop-color="#7aa9e6"/>
     </linearGradient>
-    <linearGradient id="panelGradient" x1="112" y1="112" x2="400" y2="400" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.04"/>
+    <linearGradient id="cardBackRight" x1="170" y1="72" x2="430" y2="412" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffe0b5"/>
+      <stop offset="1" stop-color="#f0a95a"/>
     </linearGradient>
-    <linearGradient id="cardBackGradient" x1="146" y1="108" x2="314" y2="280" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#f5f8fc"/>
-      <stop offset="1" stop-color="#d7e0eb"/>
+    <linearGradient id="cardFront" x1="120" y1="112" x2="392" y2="404" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fffdf8"/>
+      <stop offset="1" stop-color="#f2ecdf"/>
     </linearGradient>
-    <linearGradient id="cardMidGradient" x1="188" y1="118" x2="386" y2="296" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#e7eef5"/>
+    <linearGradient id="spineGradient" x1="110" y1="136" x2="168" y2="386" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1f7f8c"/>
+      <stop offset="1" stop-color="#164f6f"/>
     </linearGradient>
-    <linearGradient id="cardFrontGradient" x1="146" y1="150" x2="360" y2="360" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fffdf7"/>
-      <stop offset="1" stop-color="#efe1bf"/>
+    <linearGradient id="glyphGradient" x1="178" y1="162" x2="336" y2="336" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#202532"/>
+      <stop offset="1" stop-color="#49556d"/>
     </linearGradient>
-    <linearGradient id="boxTopGradient" x1="124" y1="266" x2="392" y2="338" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#e2ac44"/>
-      <stop offset="1" stop-color="#b77022"/>
+    <linearGradient id="accentGradient" x1="204" y1="284" x2="366" y2="408" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e85e52"/>
+      <stop offset="1" stop-color="#b72f39"/>
     </linearGradient>
-    <linearGradient id="boxFrontGradient" x1="138" y1="318" x2="376" y2="428" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#d28a33"/>
-      <stop offset="1" stop-color="#8d4f1a"/>
-    </linearGradient>
-    <linearGradient id="boxSideGradient" x1="300" y1="298" x2="406" y2="392" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#bd7324"/>
-      <stop offset="1" stop-color="#6f3f17"/>
-    </linearGradient>
-    <linearGradient id="glyphGradient" x1="190" y1="168" x2="316" y2="318" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#205879"/>
-      <stop offset="1" stop-color="#123248"/>
-    </linearGradient>
-    <linearGradient id="accentGradient" x1="252" y1="126" x2="290" y2="170" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#38c6bb"/>
-      <stop offset="1" stop-color="#179184"/>
-    </linearGradient>
-    <radialGradient id="glowGradient" cx="0.5" cy="0.34" r="0.66">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    <radialGradient id="lensGlow" cx="0" cy="0" r="1" gradientTransform="translate(336 336) rotate(90) scale(84)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.88"/>
+      <stop offset="0.7" stop-color="#dbeaff" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#b9d2f2" stop-opacity="1"/>
     </radialGradient>
   </defs>
+
   <g>
-    <rect x="56" y="56" width="400" height="400" rx="92" ry="92" fill="url(#bgGradient)"/>
-    <rect x="76" y="76" width="360" height="360" rx="74" ry="74" fill="url(#panelGradient)"/>
-    <ellipse cx="256" cy="164" rx="138" ry="96" fill="url(#glowGradient)"/>
+    <rect x="74" y="98" width="250" height="300" rx="38" ry="38" fill="url(#cardBackLeft)"/>
+    <path d="M116 128h152c26 0 38 11 38 37v166c0 26-12 37-38 37H116c-26 0-38-11-38-37V165c0-26 12-37 38-37z" fill="#ffffff" fill-opacity="0.18"/>
   </g>
+
   <g>
-    <path d="M145 137H277C290 137 303 142 313 151L336 172C346 181 352 194 352 208V260C352 277 338 291 321 291H145C128 291 114 277 114 260V168C114 151 128 137 145 137Z" fill="url(#cardBackGradient)"/>
-    <path d="M197 128H329C342 128 354 133 364 142L389 165C398 174 404 187 404 201V255C404 272 390 286 373 286H197C180 286 166 272 166 255V159C166 142 180 128 197 128Z" fill="url(#cardMidGradient)"/>
-    <path d="M146 162H322C335 162 348 167 357 176L382 199C391 208 396 220 396 233V329C396 346 382 360 365 360H146C129 360 115 346 115 329V193C115 176 129 162 146 162Z" fill="url(#cardFrontGradient)"/>
-    <path d="M146 162H322C335 162 348 167 357 176L382 199C391 208 396 220 396 233V250H115V193C115 176 129 162 146 162Z" fill="#ffffff" opacity="0.30"/>
+    <rect x="186" y="78" width="252" height="300" rx="38" ry="38" fill="url(#cardBackRight)"/>
+    <path d="M226 108h150c26 0 38 11 38 37v166c0 26-12 37-38 37H226c-26 0-38-11-38-37V145c0-26 12-37 38-37z" fill="#ffffff" fill-opacity="0.16"/>
   </g>
+
   <g>
-    <path d="M233 183H278L327 320H291L280 290H211L199 320H163ZM245 214L223 264H268L247 214Z" fill="url(#glyphGradient)"/>
-    <path d="M258 136L293 136L275 164H246Z" fill="url(#accentGradient)"/>
-    <rect x="157" y="204" width="30" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.52"/>
-    <rect x="146" y="224" width="48" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.44"/>
-    <rect x="148" y="283" width="58" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.40"/>
-    <rect x="148" y="303" width="72" height="8" rx="4" ry="4" fill="#2f6f8a" opacity="0.34"/>
+    <rect x="110" y="118" width="292" height="300" rx="42" ry="42" fill="url(#cardFront)"/>
+    <rect x="110" y="118" width="292" height="300" rx="42" ry="42" fill="none" stroke="#d9d1c2" stroke-width="6"/>
+    <rect x="110" y="118" width="58" height="300" rx="42" ry="42" fill="url(#spineGradient)"/>
+    <rect x="154" y="118" width="14" height="300" fill="#164f6f"/>
   </g>
+
   <g>
-    <path d="M137 287L255 312L375 287L406 314L255 350L106 314Z" fill="url(#boxTopGradient)"/>
-    <path d="M106 314L255 350V412L106 374Z" fill="url(#boxFrontGradient)"/>
-    <path d="M255 350L406 314V374L255 412Z" fill="url(#boxSideGradient)"/>
-    <path d="M184 298L255 312L327 298L255 280Z" fill="#f0c36d" opacity="0.66"/>
-    <path d="M164 320L216 333V367L164 354Z" fill="#f8d79a" opacity="0.18"/>
-    <path d="M328 326L373 315V349L328 361Z" fill="#fff2cf" opacity="0.12"/>
+    <circle cx="139" cy="184" r="11" fill="#f4fbff"/>
+    <circle cx="139" cy="226" r="11" fill="#f4fbff"/>
+    <circle cx="139" cy="268" r="11" fill="#f4fbff"/>
+    <circle cx="139" cy="310" r="11" fill="#f4fbff"/>
   </g>
-  <g>
-    <path d="M126 269L145 162L205 162L181 287Z" fill="#fff5d7" opacity="0.55"/>
-    <path d="M334 162L387 206L387 317L362 305L357 176Z" fill="#fff5d7" opacity="0.34"/>
+
+  <g fill="#d7cfbf">
+    <rect x="190" y="160" width="164" height="14" rx="7" ry="7"/>
+    <rect x="190" y="188" width="122" height="12" rx="6" ry="6"/>
+    <rect x="190" y="360" width="118" height="10" rx="5" ry="5"/>
+    <rect x="190" y="382" width="92" height="10" rx="5" ry="5"/>
   </g>
+
   <g>
-    <ellipse cx="256" cy="421" rx="132" ry="18" fill="#0b2132" opacity="0.22"/>
+    <path d="M264 182l56 144h-35l-10-29h-63l-10 29h-34l55-144h41zm-20 87h40l-20-57-20 57z" fill="url(#glyphGradient)"/>
+    <path d="M285 223c20 0 35 15 35 36s-15 36-35 36h-13v-22h10c8 0 14-6 14-14s-6-14-14-14h-10v-22h13z" fill="#7d8ba2"/>
+    <rect x="208" y="336" width="106" height="12" rx="6" ry="6" fill="#d7cfbf"/>
+  </g>
+
+  <g>
+    <circle cx="336" cy="334" r="69" fill="url(#lensGlow)"/>
+    <circle cx="336" cy="334" r="69" fill="none" stroke="url(#accentGradient)" stroke-width="16"/>
+    <path d="M382 382l42 42" fill="none" stroke="url(#accentGradient)" stroke-width="24" stroke-linecap="round"/>
+    <rect x="282" y="298" width="92" height="12" rx="6" ry="6" fill="#8ca6c8"/>
+    <rect x="282" y="322" width="66" height="12" rx="6" ry="6" fill="#8ca6c8"/>
+    <rect x="282" y="346" width="78" height="12" rx="6" ry="6" fill="#8ca6c8"/>
+    <circle cx="300" cy="279" r="8" fill="#e85e52"/>
+    <circle cx="323" cy="279" r="8" fill="#f0a95a"/>
+    <circle cx="346" cy="279" r="8" fill="#1f7f8c"/>
   </g>
 </svg>
