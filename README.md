@@ -27,6 +27,7 @@ On Debian-based systems, large font collections often arrive as package files. T
 
 - Desktop GUI built with `PyQt6`.
 - Two main GUI tabs: `Workspace` and `Log`.
+- Application menu with `File > Exit` and `Help > About...`.
 - Localized workspace naming for English and Spanish environments.
 - Extraction of fonts from `.deb` packages using `dpkg-deb -x`.
 - Duplicate detection by `SHA256`.
@@ -35,9 +36,11 @@ On Debian-based systems, large font collections often arrive as package files. T
 - Derived Spanish-capable and technical sub-albums.
 - HTML album generation for the three current collections.
 - PNG card generation for the three current collections.
+- Optional flat PNG-card export folders for the main, Spanish, and technical collections.
 - Per-action progress bar in the GUI for workspace preparation, extraction, analysis, HTML generation, and PNG card generation.
+- Visual step-state indicators for the main workflow: pending, in progress, and completed/current.
 - Qt translation loading for English and Spanish.
-- Automated tests for workspace, translations, and card generation.
+- Automated tests for workspace, translations, card generation, and flat card export.
 
 ## Current Status
 
@@ -49,6 +52,7 @@ Implemented today:
 - Spanish and technical subset derivation;
 - HTML generation;
 - PNG card generation;
+- optional flat card folder export for image-viewer browsing;
 - translation loading and translation assets;
 - initial automated test coverage.
 
@@ -164,9 +168,14 @@ This creates or verifies the main working folders. Depending on locale and exist
 The `Workspace` tab contains:
 
 - `Workspace Status`: shows the main workspace paths, their existence status, and write access.
-- `Primary Actions`: contains the main workflow buttons and a progress bar that advances while each action runs.
+- `Primary Actions`: contains the five numbered workflow buttons, a progress bar, a step-state legend, and optional flat-card export actions.
 
 The `Log` tab contains the built-in execution log.
+
+The menu bar contains:
+
+- `File > Exit`: closes the application.
+- `Help > About...`: shows author, license, website, email, technologies used, and a short description of the program.
 
 ### 3. Add `.deb` packages
 
@@ -222,6 +231,24 @@ Generated outputs:
 
 These cards are rendered from the locally extracted font files with `Pillow`.
 
+### 8. Optional flat PNG card folders
+
+If you want to browse all cards sequentially in an image viewer such as `Gwenview`, use the optional flat-card buttons in the `Workspace` tab.
+
+These actions copy all generated PNG cards from package subfolders into a single root folder per collection:
+
+- `album-fuentes/tarjetas-fuentes-raiz`
+- `album-fuentes-espanol/tarjetas-fuentes-espanol-raiz`
+- `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas-raiz`
+
+Equivalent English folder names are used in English-localized workspaces:
+
+- `font-album/font-cards-root`
+- `spanish-font-album/spanish-font-cards-root`
+- `technical-font-album/technical-font-cards-root`
+
+Those buttons stay disabled until the corresponding PNG cards already exist.
+
 ## Workspace Model
 
 Current album structure in a Spanish workspace:
@@ -230,12 +257,15 @@ Current album structure in a Spanish workspace:
 - `album-fuentes`
 - `album-fuentes/fuentes-extraidas`
 - `album-fuentes/tarjetas-fuentes`
+- `album-fuentes/tarjetas-fuentes-raiz`
 - `album-fuentes-espanol`
 - `album-fuentes-espanol/fuentes-extraidas`
 - `album-fuentes-espanol/tarjetas-fuentes-espanol`
+- `album-fuentes-espanol/tarjetas-fuentes-espanol-raiz`
 - `album-fuentes-tecnicas`
 - `album-fuentes-tecnicas/fuentes-extraidas`
 - `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas`
+- `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas-raiz`
 
 Equivalent English folder names are also supported for new English-localized workspaces.
 
@@ -244,6 +274,11 @@ The `Workspace Status` table also shows the card output directories explicitly s
 - `album-fuentes/tarjetas-fuentes`
 - `album-fuentes-espanol/tarjetas-fuentes-espanol`
 - `album-fuentes-tecnicas/tarjetas-fuentes-tecnicas`
+
+The optional flat-card section also shows, per collection:
+
+- the destination flat folder path;
+- whether that folder already exists.
 
 ## Tests
 
@@ -261,9 +296,11 @@ Current coverage includes:
 - reuse of an existing localized workspace;
 - write-access validation for workspace paths;
 - creation of extracted-font and PNG-card directories;
+- flat-card folder naming for English and Spanish;
 - translation loading;
 - translation of UI and service strings;
-- PNG card generation from extracted fonts.
+- PNG card generation from extracted fonts;
+- flat PNG card export into a single root folder.
 
 ## Translations
 
@@ -294,8 +331,9 @@ Service-oriented modules currently in use:
 - `AnalysisService`: metadata reading, Spanish coverage, and technical classification.
 - `HtmlGenerationService`: HTML album generation.
 - `CardGenerationService`: PNG card generation.
+- `FlatCardExportService`: copying generated PNG cards into flat root folders for sequential browsing.
 
-The GUI in `fontgallery/main_window.py` orchestrates those services, shows per-action progress in the `Workspace` tab, and keeps the execution log in the separate `Log` tab.
+The GUI in `fontgallery/main_window.py` orchestrates those services, shows per-action progress and step status in the `Workspace` tab, exposes optional flat-card export actions, and keeps the execution log in the separate `Log` tab.
 
 ## Roadmap
 
