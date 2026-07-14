@@ -13,16 +13,26 @@ from .analysis import TECHNICAL_KEYWORDS
 from .workspace import WorkspaceService
 
 
-DEFAULT_SAMPLE_TEXT = (
+DEFAULT_SAMPLE_HEADER = (
     "abcdefghijklmnopqrstuvwxyz\n"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"
-    "0123456789 áéíóú üñ |@#~½{[]}¡!\"'$%&\\ /()=¿?<> +-ºª÷©°®\n"
+    "0123456789 áéíóú üñ |@#~½{[]}¡!\"'$%&\\ /()=¿?<> +-ºª÷©°®"
+)
+
+DEFAULT_CARD_LONG_TEXT = (
     "\"Nunca se aparten de ti la misericordia y la verdad;\n"
     "átalas a tu cuello, escríbelas en la tabla de tu corazón;\n"
     "y hallarás gracia y buena opinión ante los ojos de Dios\n"
     "y de los hombres.\"\n"
     "Proverbios 3:3-4 (RVR1960)"
 )
+
+
+def compose_default_sample_text(long_text: str) -> str:
+    return f"{DEFAULT_SAMPLE_HEADER}\n{long_text.strip()}"
+
+
+DEFAULT_SAMPLE_TEXT = compose_default_sample_text(DEFAULT_CARD_LONG_TEXT)
 
 TECHNICAL_SAMPLE_TEXT = (
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"

@@ -82,6 +82,30 @@ def test_card_generation_reports_progress(tmp_path: Path) -> None:
     assert progress_updates[-1][0] == progress_updates[-1][1]
 
 
+def test_card_generation_accepts_custom_long_text(tmp_path: Path) -> None:
+    try:
+        font_path = _find_test_font()
+    except FileNotFoundError as exc:
+        pytest.skip(str(exc))
+
+    workspace = WorkspaceService(tmp_path, language_code="es_ES")
+    workspace.prepare_structure()
+
+    for target in (
+        workspace.album_main_extract_dir / "fonts-demo" / "fonts-demo__DejaVuSans.ttf",
+        workspace.album_es_extract_dir / "fonts-demo" / "fonts-demo__DejaVuSans.ttf",
+        workspace.album_tech_extract_dir / "latex-demo" / "latex-demo__cmex-demo.ttf",
+    ):
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(font_path, target)
+
+    service = CardGenerationService(workspace)
+    summaries = service.generate_all_albums(long_text="Texto breve de prueba.\nReferencia corta.")
+
+    assert summaries[0].generated_cards == 1
+    assert (workspace.album_main_cards_dir / "fonts-demo" / "fonts-demo__DejaVuSans.png").is_file()
+
+
 def test_card_generation_wraps_sample_lines_to_card_width(tmp_path: Path) -> None:
     try:
         font_path = _find_test_font()

@@ -10,7 +10,7 @@ from typing import Callable
 from PyQt6.QtCore import QCoreApplication
 
 from .analysis import TECHNICAL_KEYWORDS
-from .html_generation import DEFAULT_SAMPLE_TEXT, TECHNICAL_SAMPLE_TEXT
+from .html_generation import DEFAULT_CARD_LONG_TEXT, DEFAULT_SAMPLE_TEXT, TECHNICAL_SAMPLE_TEXT, compose_default_sample_text
 from .workspace import WorkspaceService
 
 FONT_SUFFIXES = {".ttf", ".otf", ".ttc", ".pfa", ".pfb"}
@@ -62,6 +62,7 @@ class CardGenerationService:
         self,
         log: Callable[[str], None] | None = None,
         progress: Callable[[int, int, str], None] | None = None,
+        long_text: str = DEFAULT_CARD_LONG_TEXT,
     ) -> list[CardAlbumSummary]:
         def emit(message: str) -> None:
             if log is not None:
@@ -74,7 +75,7 @@ class CardGenerationService:
                 "main",
                 self.workspace.album_main_extract_dir,
                 self.workspace.album_main_cards_dir,
-                DEFAULT_SAMPLE_TEXT,
+                compose_default_sample_text(long_text),
                 False,
                 QCoreApplication.translate("CardGenerationService", "Main album"),
             ),
@@ -82,7 +83,7 @@ class CardGenerationService:
                 "spanish",
                 self.workspace.album_es_extract_dir,
                 self.workspace.album_es_cards_dir,
-                DEFAULT_SAMPLE_TEXT,
+                compose_default_sample_text(long_text),
                 True,
                 QCoreApplication.translate("CardGenerationService", "Spanish album"),
             ),

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 from pathlib import Path
 
@@ -16,9 +17,9 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QTextEdit,
     QSizePolicy,
     QTabWidget,
-    QTextEdit,
     QVBoxLayout,
     QWidget,
 )
@@ -27,7 +28,7 @@ from .services.analysis import AnalysisService
 from .services.card_generation import CardGenerationService
 from .services.extraction import ExtractionService
 from .services.flat_card_export import FlatCardExportService
-from .services.html_generation import HtmlGenerationService
+from .services.html_generation import DEFAULT_CARD_LONG_TEXT, HtmlGenerationService
 from .services.workspace import WorkspaceService
 
 
@@ -59,7 +60,13 @@ class MainWindow(QMainWindow):
         self.progress_label = QLabel()
         self.progress_bar = QProgressBar()
         self.log_output = QTextEdit()
+        self.card_text_edit = QTextEdit()
+        self.card_text_counter_label = QLabel()
+        self.settings_path = self.workspace.project_root / "fontgallery-settings.json"
         self._init_texts()
+        self._card_text_word_limit = 45
+        self._card_text_char_limit = 240
+        self._default_card_long_text = DEFAULT_CARD_LONG_TEXT
 
         self.setWindowTitle(self.window_title_text)
         self.resize(980, 700)
@@ -90,6 +97,7 @@ class MainWindow(QMainWindow):
         self.log_group_text = self.tr("Log")
         self.workspace_tab_text = self.tr("Workspace")
         self.log_tab_text = self.tr("Log")
+        self.card_text_tab_text = self.tr("Card Text")
         self.base_folder_text = self.tr("Base folder")
         self.column_item_text = self.tr("Item")
         self.column_path_text = self.tr("Path")
@@ -122,6 +130,13 @@ class MainWindow(QMainWindow):
             "These optional actions copy the generated PNG cards into a single root folder so you can browse them sequentially in an image viewer."
         )
         self.flat_export_path_column_text = self.tr("Flat folder")
+        self.card_text_group_text = self.tr("Long text used in PNG cards")
+        self.card_text_hint_text = self.tr(
+            "Edit the long text shown in the main and Spanish PNG cards. The alphabet and symbol sample stays unchanged."
+        )
+        self.card_text_restore_button_text = self.tr("Restore default text")
+        self.card_text_counter_text = self.tr("Words: {words}/{max_words} | Characters: {chars}/{max_chars}")
+        self.card_text_limit_exceeded_text = self.tr("The card text is too long for reliable PNG rendering.")
         self.progress_idle_text = self.tr("Ready.")
         self.progress_prepare_text = self.tr("Preparing workspace...")
         self.progress_extract_text = self.tr("Extracting fonts...")
@@ -209,6 +224,7 @@ class MainWindow(QMainWindow):
         self.analysis_failed_text = self.tr("Could not analyze the collection:\n{error}")
         self.html_failed_text = self.tr("Could not generate HTML indexes:\n{error}")
         self.cards_failed_text = self.tr("Could not generate PNG cards:\n{error}")
+        self.card_text_invalid_title_text = self.tr("Card text too long")
         self.flat_export_failed_text = self.tr("Could not create the flat PNG card folder:\n{error}")
         self.error_log_text = self.tr("ERROR: {error}")
         self.warning_log_text = self.tr("WARNING: {error}")
@@ -226,6 +242,7 @@ class MainWindow(QMainWindow):
 
         tabs = QTabWidget()
         tabs.addTab(self._build_workspace_tab(), self.workspace_tab_text)
+        tabs.addTab(self._build_card_text_tab(), self.card_text_tab_text)
         tabs.addTab(self._build_log_box(), self.log_tab_text)
         root_layout.addWidget(tabs, 1)
 
@@ -239,6 +256,37 @@ class MainWindow(QMainWindow):
         layout.addWidget(self._build_workspace_box())
         layout.addWidget(self._build_actions_box())
         layout.addStretch(1)
+        return tab
+
+    def _build_card_text_tab(self) -> QWidget:
+        tab = QWidget()
+        layout = QVBoxLayout(tab)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(14)
+
+        box = QGroupBox(self.card_text_group_text)
+        box_layout = QVBoxLayout(box)
+
+        hint_label = QLabel(self.card_text_hint_text)
+        hint_label.setWordWrap(True)
+        hint_label.setStyleSheet("color: #4b5563;")
+        box_layout.addWidget(hint_label)
+
+        self.card_text_edit.textChanged.connect(self._on_card_text_changed)
+        box_layout.addWidget(self.card_text_edit, 1)
+
+        footer_layout = QHBoxLayout()
+        restore_button = QPushButton(self.card_text_restore_button_text)
+        restore_button.clicked.connect(self._restore_default_card_text)
+        footer_layout.addWidget(restore_button, 0, Qt.AlignmentFlag.AlignLeft)
+
+        self.card_text_counter_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+        footer_layout.addWidget(self.card_text_counter_label, 1)
+        box_layout.addLayout(footer_layout)
+
+        layout.addWidget(box, 1)
+        self._load_card_text_settings()
+        self._refresh_card_text_counter()
         return tab
 
     def _build_workspace_box(self) -> QGroupBox:
@@ -606,9 +654,16 @@ class MainWindow(QMainWindow):
         )
 
     def on_generate_png_cards(self) -> None:
+        if not self._is_card_text_valid():
+            QMessageBox.warning(self, self.card_text_invalid_title_text, self.card_text_limit_exceeded_text)
+            return
         self._start_action_progress(self.progress_cards_text, "cards")
         try:
-            summaries = self.card_generation_service.generate_all_albums(log=self._log, progress=self._update_progress)
+            summaries = self.card_generation_service.generate_all_albums(
+                log=self._log,
+                progress=self._update_progress,
+                long_text=self.card_text_edit.toPlainText().strip(),
+            )
         except FileNotFoundError as exc:
             self._finish_action_progress("cards")
             QMessageBox.warning(self, self.html_missing_title_text, str(exc))
@@ -849,6 +904,63 @@ class MainWindow(QMainWindow):
         if len(text) <= max_chars:
             return text
         return "..." + text[-(max_chars - 3):]
+
+    def _on_card_text_changed(self) -> None:
+        self._save_card_text_settings()
+        self._refresh_card_text_counter()
+
+    def _restore_default_card_text(self) -> None:
+        self.card_text_edit.blockSignals(True)
+        self.card_text_edit.setPlainText(self._default_card_long_text)
+        self.card_text_edit.blockSignals(False)
+        self._save_card_text_settings()
+        self._refresh_card_text_counter()
+
+    def _refresh_card_text_counter(self) -> None:
+        text = self.card_text_edit.toPlainText().strip()
+        words = len(text.split()) if text else 0
+        chars = len(text)
+        self.card_text_counter_label.setText(
+            self.card_text_counter_text.format(
+                words=words,
+                max_words=self._card_text_word_limit,
+                chars=chars,
+                max_chars=self._card_text_char_limit,
+            )
+        )
+        if self._is_card_text_valid():
+            self.card_text_counter_label.setStyleSheet("color: #4b5563; font-weight: 600;")
+        else:
+            self.card_text_counter_label.setStyleSheet("color: #b42318; font-weight: 700;")
+
+    def _is_card_text_valid(self) -> bool:
+        text = self.card_text_edit.toPlainText().strip()
+        words = len(text.split()) if text else 0
+        chars = len(text)
+        return bool(text) and words <= self._card_text_word_limit and chars <= self._card_text_char_limit
+
+    def _load_card_text_settings(self) -> None:
+        text = self._default_card_long_text
+        try:
+            data = json.loads(self.settings_path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            data = {}
+        if isinstance(data, dict):
+            stored = data.get("card_long_text")
+            if isinstance(stored, str) and stored.strip():
+                text = stored
+        self.card_text_edit.setPlainText(text)
+
+    def _save_card_text_settings(self) -> None:
+        data = {}
+        try:
+            data = json.loads(self.settings_path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError, OSError):
+            data = {}
+        if not isinstance(data, dict):
+            data = {}
+        data["card_long_text"] = self.card_text_edit.toPlainText().strip() or self._default_card_long_text
+        self.settings_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
     def _refresh_step_button_styles(self) -> None:
         styles = {
