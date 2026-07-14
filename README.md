@@ -11,7 +11,7 @@
 
 The project is aimed at designers, power users, and developers who want to inspect repository fonts visually instead of treating font packages as opaque archives. Its workflow extracts fonts from Debian packages, analyzes them, separates technical fonts from design-oriented fonts, and generates outputs that can be reviewed outside the application.
 
-![](Imagens/05-FontGallery.png)
+![](Imagens/05-FontGallery.png)  
 
 
 ## Why This Project Exists
