@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QProgressBar,
     QPushButton,
+    QSizePolicy,
     QTabWidget,
     QTextEdit,
     QVBoxLayout,
@@ -45,6 +46,8 @@ class MainWindow(QMainWindow):
         self.action_buttons: list[QPushButton] = []
         self.step_buttons: dict[str, QPushButton] = {}
         self.flat_export_buttons: dict[str, QPushButton] = {}
+        self.flat_export_path_labels: dict[str, QLabel] = {}
+        self.flat_export_status_labels: dict[str, QLabel] = {}
         self.step_states = {
             "prepare": "pending",
             "extract": "pending",
@@ -78,7 +81,6 @@ class MainWindow(QMainWindow):
 
     def _init_texts(self) -> None:
         self.window_title_text = self.tr("FontGallery")
-        self.title_text = self.tr("FontGallery")
         self.subtitle_text = self.tr(
             "Tool for preparing a workspace and automating visual font albums from .deb packages."
         )
@@ -113,12 +115,13 @@ class MainWindow(QMainWindow):
         self.html_button_text = self.tr("4. Generate HTML indexes")
         self.cards_button_text = self.tr("5. Generate PNG cards")
         self.refresh_button_text = self.tr("Refresh status")
-        self.export_main_flat_button_text = self.tr("Optional: copy main PNG cards into one root folder")
-        self.export_spanish_flat_button_text = self.tr("Optional: copy Spanish PNG cards into one root folder")
-        self.export_technical_flat_button_text = self.tr("Optional: copy technical PNG cards into one root folder")
+        self.export_main_flat_button_text = self.tr("Copy main PNG cards to one root folder")
+        self.export_spanish_flat_button_text = self.tr("Copy Spanish PNG cards to one root folder")
+        self.export_technical_flat_button_text = self.tr("Copy technical PNG cards to one root folder")
         self.optional_export_hint_text = self.tr(
             "These optional actions copy the generated PNG cards into a single root folder so you can browse them sequentially in an image viewer."
         )
+        self.flat_export_path_column_text = self.tr("Flat folder")
         self.progress_idle_text = self.tr("Ready.")
         self.progress_prepare_text = self.tr("Preparing workspace...")
         self.progress_extract_text = self.tr("Extracting fonts...")
@@ -212,10 +215,6 @@ class MainWindow(QMainWindow):
         root_layout = QVBoxLayout(central)
         root_layout.setContentsMargins(16, 16, 16, 16)
         root_layout.setSpacing(14)
-
-        title = QLabel(self.title_text)
-        title.setStyleSheet("font-size: 28px; font-weight: 700;")
-        root_layout.addWidget(title)
 
         subtitle = QLabel(self.subtitle_text)
         subtitle.setWordWrap(True)
@@ -337,24 +336,53 @@ class MainWindow(QMainWindow):
         hint_label.setStyleSheet("color: #4b5563;")
         layout.addWidget(hint_label)
 
-        buttons_layout = QVBoxLayout()
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(12)
+        grid.setVerticalSpacing(8)
+        grid.addWidget(QLabel(self.column_item_text), 0, 0)
+        grid.addWidget(QLabel(self.flat_export_path_column_text), 0, 1)
+        grid.addWidget(QLabel(self.column_status_text), 0, 2)
 
         main_button = QPushButton(self.export_main_flat_button_text)
+        main_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
         main_button.clicked.connect(lambda: self.on_export_flat_cards("main"))
-        buttons_layout.addWidget(main_button)
         self.flat_export_buttons["main"] = main_button
+        main_path_label = QLabel()
+        main_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        main_status_label = QLabel()
+        self.flat_export_path_labels["main"] = main_path_label
+        self.flat_export_status_labels["main"] = main_status_label
+        grid.addWidget(main_button, 1, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        grid.addWidget(main_path_label, 1, 1)
+        grid.addWidget(main_status_label, 1, 2)
 
         spanish_button = QPushButton(self.export_spanish_flat_button_text)
+        spanish_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
         spanish_button.clicked.connect(lambda: self.on_export_flat_cards("spanish"))
-        buttons_layout.addWidget(spanish_button)
         self.flat_export_buttons["spanish"] = spanish_button
+        spanish_path_label = QLabel()
+        spanish_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        spanish_status_label = QLabel()
+        self.flat_export_path_labels["spanish"] = spanish_path_label
+        self.flat_export_status_labels["spanish"] = spanish_status_label
+        grid.addWidget(spanish_button, 2, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        grid.addWidget(spanish_path_label, 2, 1)
+        grid.addWidget(spanish_status_label, 2, 2)
 
         technical_button = QPushButton(self.export_technical_flat_button_text)
+        technical_button.setSizePolicy(QSizePolicy.Policy.Maximum, QSizePolicy.Policy.Fixed)
         technical_button.clicked.connect(lambda: self.on_export_flat_cards("technical"))
-        buttons_layout.addWidget(technical_button)
         self.flat_export_buttons["technical"] = technical_button
+        technical_path_label = QLabel()
+        technical_path_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        technical_status_label = QLabel()
+        self.flat_export_path_labels["technical"] = technical_path_label
+        self.flat_export_status_labels["technical"] = technical_status_label
+        grid.addWidget(technical_button, 3, 0, alignment=Qt.AlignmentFlag.AlignLeft)
+        grid.addWidget(technical_path_label, 3, 1)
+        grid.addWidget(technical_status_label, 3, 2)
 
-        layout.addLayout(buttons_layout)
+        layout.addLayout(grid)
         return box
 
     def _build_step_legend(self) -> QHBoxLayout:
@@ -420,6 +448,7 @@ class MainWindow(QMainWindow):
                 count=self.workspace.deb_package_count(),
             )
         )
+        self._refresh_flat_export_statuses()
 
     def on_prepare_structure(self) -> None:
         self._start_action_progress(self.progress_prepare_text, "prepare")
@@ -793,6 +822,30 @@ class MainWindow(QMainWindow):
         }
         for label, button in self.flat_export_buttons.items():
             button.setEnabled(actions_enabled and available[label])
+
+    def _refresh_flat_export_statuses(self) -> None:
+        flat_dirs = {
+            "main": self.workspace.album_main_flat_cards_dir,
+            "spanish": self.workspace.album_es_flat_cards_dir,
+            "technical": self.workspace.album_tech_flat_cards_dir,
+        }
+        for label, directory in flat_dirs.items():
+            path_label = self.flat_export_path_labels[label]
+            status_label = self.flat_export_status_labels[label]
+            path_label.setText(self._elide_path_from_start(directory))
+            path_label.setToolTip(str(directory))
+            if directory.exists():
+                status_label.setText(self.exists_text)
+                status_label.setStyleSheet("color: #0a7f2e; font-weight: 600;")
+            else:
+                status_label.setText(self.missing_text)
+                status_label.setStyleSheet("color: #a33; font-weight: 600;")
+
+    def _elide_path_from_start(self, path: Path, max_chars: int = 78) -> str:
+        text = str(path)
+        if len(text) <= max_chars:
+            return text
+        return "..." + text[-(max_chars - 3):]
 
     def _refresh_step_button_styles(self) -> None:
         styles = {
