@@ -33,6 +33,9 @@ def test_workspace_creates_english_structure_in_empty_directory(tmp_path: Path) 
     assert workspace.album_main_cards_dir.name == "font-cards"
     assert workspace.album_es_cards_dir.name == "spanish-font-cards"
     assert workspace.album_tech_cards_dir.name == "technical-font-cards"
+    assert workspace.album_main_flat_cards_dir.name == "font-cards-root"
+    assert workspace.album_es_flat_cards_dir.name == "spanish-font-cards-root"
+    assert workspace.album_tech_flat_cards_dir.name == "technical-font-cards-root"
 
 
 def test_workspace_creates_spanish_structure_in_empty_directory(tmp_path: Path) -> None:
@@ -59,6 +62,9 @@ def test_workspace_creates_spanish_structure_in_empty_directory(tmp_path: Path) 
     assert workspace.album_main_cards_dir.name == "tarjetas-fuentes"
     assert workspace.album_es_cards_dir.name == "tarjetas-fuentes-espanol"
     assert workspace.album_tech_cards_dir.name == "tarjetas-fuentes-tecnicas"
+    assert workspace.album_main_flat_cards_dir.name == "tarjetas-fuentes-raiz"
+    assert workspace.album_es_flat_cards_dir.name == "tarjetas-fuentes-espanol-raiz"
+    assert workspace.album_tech_flat_cards_dir.name == "tarjetas-fuentes-tecnicas-raiz"
 
 
 def test_workspace_reuses_existing_spanish_structure_for_english_locale(tmp_path: Path) -> None:

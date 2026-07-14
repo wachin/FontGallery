@@ -25,6 +25,9 @@ class WorkspaceScheme:
     album_main_cards_dirname: str
     album_es_cards_dirname: str
     album_tech_cards_dirname: str
+    album_main_flat_cards_dirname: str
+    album_es_flat_cards_dirname: str
+    album_tech_flat_cards_dirname: str
     album_main_html_name: str
     album_es_html_name: str
     album_tech_html_name: str
@@ -41,6 +44,9 @@ WORKSPACE_SCHEMES = {
         album_main_cards_dirname="font-cards",
         album_es_cards_dirname="spanish-font-cards",
         album_tech_cards_dirname="technical-font-cards",
+        album_main_flat_cards_dirname="font-cards-root",
+        album_es_flat_cards_dirname="spanish-font-cards-root",
+        album_tech_flat_cards_dirname="technical-font-cards-root",
         album_main_html_name="font-album.html",
         album_es_html_name="spanish-font-album.html",
         album_tech_html_name="technical-font-album.html",
@@ -55,6 +61,9 @@ WORKSPACE_SCHEMES = {
         album_main_cards_dirname="tarjetas-fuentes",
         album_es_cards_dirname="tarjetas-fuentes-espanol",
         album_tech_cards_dirname="tarjetas-fuentes-tecnicas",
+        album_main_flat_cards_dirname="tarjetas-fuentes-raiz",
+        album_es_flat_cards_dirname="tarjetas-fuentes-espanol-raiz",
+        album_tech_flat_cards_dirname="tarjetas-fuentes-tecnicas-raiz",
         album_main_html_name="album-fuentes.html",
         album_es_html_name="album-fuentes-espanol.html",
         album_tech_html_name="album-fuentes-tecnicas.html",
@@ -214,6 +223,33 @@ class WorkspaceService:
             parent=self.album_tech_dir,
             preferred_name=scheme.album_tech_cards_dirname,
             candidate_names=[scheme.album_tech_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
+        )
+
+    @property
+    def album_main_flat_cards_dir(self) -> Path:
+        scheme = self._scheme_for_album_dir(self.album_main_dir, "album_main")
+        return self._resolve_child_existing_or_preferred(
+            parent=self.album_main_dir,
+            preferred_name=scheme.album_main_flat_cards_dirname,
+            candidate_names=[scheme.album_main_flat_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
+        )
+
+    @property
+    def album_es_flat_cards_dir(self) -> Path:
+        scheme = self._scheme_for_album_dir(self.album_es_dir, "album_es")
+        return self._resolve_child_existing_or_preferred(
+            parent=self.album_es_dir,
+            preferred_name=scheme.album_es_flat_cards_dirname,
+            candidate_names=[scheme.album_es_flat_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
+        )
+
+    @property
+    def album_tech_flat_cards_dir(self) -> Path:
+        scheme = self._scheme_for_album_dir(self.album_tech_dir, "album_tech")
+        return self._resolve_child_existing_or_preferred(
+            parent=self.album_tech_dir,
+            preferred_name=scheme.album_tech_flat_cards_dirname,
+            candidate_names=[scheme.album_tech_flat_cards_dirname for scheme in WORKSPACE_SCHEMES.values()],
         )
 
     def path_status(self) -> list[dict[str, str | bool]]:

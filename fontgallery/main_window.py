@@ -25,6 +25,7 @@ from PyQt6.QtWidgets import (
 from .services.analysis import AnalysisService
 from .services.card_generation import CardGenerationService
 from .services.extraction import ExtractionService
+from .services.flat_card_export import FlatCardExportService
 from .services.html_generation import HtmlGenerationService
 from .services.workspace import WorkspaceService
 
@@ -37,11 +38,13 @@ class MainWindow(QMainWindow):
         self.analysis_service = AnalysisService(workspace)
         self.html_generation_service = HtmlGenerationService(workspace)
         self.card_generation_service = CardGenerationService(workspace)
+        self.flat_card_export_service = FlatCardExportService(workspace)
         self.path_labels: dict[str, QLabel] = {}
         self.exists_labels: dict[str, QLabel] = {}
         self.write_labels: dict[str, QLabel] = {}
         self.action_buttons: list[QPushButton] = []
         self.step_buttons: dict[str, QPushButton] = {}
+        self.flat_export_buttons: dict[str, QPushButton] = {}
         self.step_states = {
             "prepare": "pending",
             "extract": "pending",
@@ -81,6 +84,7 @@ class MainWindow(QMainWindow):
         )
         self.workspace_group_text = self.tr("Workspace Status")
         self.actions_group_text = self.tr("Primary Actions")
+        self.optional_group_text = self.tr("Optional Flat Card Folders")
         self.log_group_text = self.tr("Log")
         self.workspace_tab_text = self.tr("Workspace")
         self.log_tab_text = self.tr("Log")
@@ -109,6 +113,12 @@ class MainWindow(QMainWindow):
         self.html_button_text = self.tr("4. Generate HTML indexes")
         self.cards_button_text = self.tr("5. Generate PNG cards")
         self.refresh_button_text = self.tr("Refresh status")
+        self.export_main_flat_button_text = self.tr("Optional: copy main PNG cards into one root folder")
+        self.export_spanish_flat_button_text = self.tr("Optional: copy Spanish PNG cards into one root folder")
+        self.export_technical_flat_button_text = self.tr("Optional: copy technical PNG cards into one root folder")
+        self.optional_export_hint_text = self.tr(
+            "These optional actions copy the generated PNG cards into a single root folder so you can browse them sequentially in an image viewer."
+        )
         self.progress_idle_text = self.tr("Ready.")
         self.progress_prepare_text = self.tr("Preparing workspace...")
         self.progress_extract_text = self.tr("Extracting fonts...")
@@ -176,6 +186,10 @@ class MainWindow(QMainWindow):
         self.cards_completed_message_text = self.tr(
             "The PNG font cards were generated successfully.\n\n{details}"
         )
+        self.flat_export_completed_title_text = self.tr("Flat PNG card folder created")
+        self.flat_export_completed_message_text = self.tr(
+            "Copied {count} PNG cards into:\n{path}"
+        )
         self.html_summary_log_text = self.tr(
             "HTML album '{label}': included={included}, excluded={excluded}, path={path}"
         )
@@ -189,6 +203,7 @@ class MainWindow(QMainWindow):
         self.analysis_failed_text = self.tr("Could not analyze the collection:\n{error}")
         self.html_failed_text = self.tr("Could not generate HTML indexes:\n{error}")
         self.cards_failed_text = self.tr("Could not generate PNG cards:\n{error}")
+        self.flat_export_failed_text = self.tr("Could not create the flat PNG card folder:\n{error}")
         self.error_log_text = self.tr("ERROR: {error}")
         self.warning_log_text = self.tr("WARNING: {error}")
 
@@ -309,7 +324,37 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.progress_label)
         layout.addWidget(self.progress_bar)
         layout.addLayout(self._build_step_legend())
+        layout.addWidget(self._build_optional_exports_box())
         self._refresh_step_button_styles()
+        return box
+
+    def _build_optional_exports_box(self) -> QGroupBox:
+        box = QGroupBox(self.optional_group_text)
+        layout = QVBoxLayout(box)
+
+        hint_label = QLabel(self.optional_export_hint_text)
+        hint_label.setWordWrap(True)
+        hint_label.setStyleSheet("color: #4b5563;")
+        layout.addWidget(hint_label)
+
+        buttons_layout = QVBoxLayout()
+
+        main_button = QPushButton(self.export_main_flat_button_text)
+        main_button.clicked.connect(lambda: self.on_export_flat_cards("main"))
+        buttons_layout.addWidget(main_button)
+        self.flat_export_buttons["main"] = main_button
+
+        spanish_button = QPushButton(self.export_spanish_flat_button_text)
+        spanish_button.clicked.connect(lambda: self.on_export_flat_cards("spanish"))
+        buttons_layout.addWidget(spanish_button)
+        self.flat_export_buttons["spanish"] = spanish_button
+
+        technical_button = QPushButton(self.export_technical_flat_button_text)
+        technical_button.clicked.connect(lambda: self.on_export_flat_cards("technical"))
+        buttons_layout.addWidget(technical_button)
+        self.flat_export_buttons["technical"] = technical_button
+
+        layout.addLayout(buttons_layout)
         return box
 
     def _build_step_legend(self) -> QHBoxLayout:
@@ -614,12 +659,42 @@ class MainWindow(QMainWindow):
 
         dialog.exec()
 
+    def on_export_flat_cards(self, label: str) -> None:
+        label_text = self.album_labels_text.get(label, label)
+        self._start_action_progress(
+            self.tr("Copying {label} PNG cards into one root folder...").format(label=label_text),
+            "cards",
+        )
+        try:
+            summary = self.flat_card_export_service.export_album(
+                label=label,
+                log=self._log,
+                progress=self._update_progress,
+            )
+        except (FileNotFoundError, OSError, ValueError) as exc:
+            self._finish_action_progress("cards")
+            QMessageBox.critical(self, self.error_title_text, self.flat_export_failed_text.format(error=exc))
+            self._log(self.error_log_text.format(error=exc))
+            return
+
+        self._complete_action_progress(self.progress_completed_text, "cards")
+        self.refresh_status()
+        QMessageBox.information(
+            self,
+            self.flat_export_completed_title_text,
+            self.flat_export_completed_message_text.format(
+                count=summary.copied_cards,
+                path=summary.output_dir,
+            ),
+        )
+
     def _log(self, message: str) -> None:
         self.log_output.append(message)
 
     def _set_actions_enabled(self, enabled: bool) -> None:
         for button in self.action_buttons:
             button.setEnabled(enabled)
+        self._refresh_flat_export_buttons(enabled)
 
     def _start_action_progress(self, label: str, step_key: str) -> None:
         self._set_actions_enabled(False)
@@ -680,6 +755,7 @@ class MainWindow(QMainWindow):
         for step_key, is_completed in states.items():
             self.step_states[step_key] = "completed" if is_completed else "pending"
         self._refresh_step_button_styles()
+        self._refresh_flat_export_buttons(all(button.isEnabled() for button in self.action_buttons))
 
     def _is_workspace_prepared(self) -> bool:
         return all(item.path.exists() and item.path.is_dir() for item in self.workspace.required_directories)
@@ -708,6 +784,15 @@ class MainWindow(QMainWindow):
         if not directory.exists() or not directory.is_dir():
             return False
         return any(path.is_file() for path in directory.rglob("*"))
+
+    def _refresh_flat_export_buttons(self, actions_enabled: bool) -> None:
+        available = {
+            "main": self._has_generated_files(self.workspace.album_main_cards_dir),
+            "spanish": self._has_generated_files(self.workspace.album_es_cards_dir),
+            "technical": self._has_generated_files(self.workspace.album_tech_cards_dir),
+        }
+        for label, button in self.flat_export_buttons.items():
+            button.setEnabled(actions_enabled and available[label])
 
     def _refresh_step_button_styles(self) -> None:
         styles = {

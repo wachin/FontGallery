@@ -11,6 +11,7 @@ pylupdate6 \
   fontgallery/services/analysis.py \
   fontgallery/services/html_generation.py \
   fontgallery/services/card_generation.py \
+  fontgallery/services/flat_card_export.py \
   -ts translations/fontgallery_en.ts \
   -ts translations/fontgallery_es.ts
 lrelease translations/fontgallery_en.ts translations/fontgallery_es.ts
