@@ -147,6 +147,9 @@ class MainWindow(QMainWindow):
         self.about_description_text = self.tr(
             "Desktop application for GNU/Linux that extracts fonts from .deb packages and builds visual HTML and PNG font albums."
         )
+        self.about_email_label_text = self.tr("Email")
+        self.about_license_label_text = self.tr("License")
+        self.about_website_label_text = self.tr("Website")
         self.about_technologies_title_text = self.tr("Technologies used")
         self.about_technologies_text = self.tr("Python 3, PyQt6, Pillow, Fontconfig, dpkg")
         self.workspace_ready_title_text = self.tr("Workspace ready")
@@ -670,9 +673,9 @@ class MainWindow(QMainWindow):
             f"<p>{self.about_description_text}</p>"
             "<p>"
             "Copyright: © 2026 Washington Indacochea Delgado<br/>"
-            "Correo: <a href=\"mailto:linuxfrontier@proton.me\">linuxfrontier@proton.me</a><br/>"
-            "Licencia: GPL3<br/>"
-            "Página Web: <a href=\"https://github.com/wachin/FontGallery\">https://github.com/wachin/FontGallery</a>"
+            f"{self.about_email_label_text}: <a href=\"mailto:linuxfrontier@proton.me\">linuxfrontier@proton.me</a><br/>"
+            f"{self.about_license_label_text}: GPL3<br/>"
+            f"{self.about_website_label_text}: <a href=\"https://github.com/wachin/FontGallery\">https://github.com/wachin/FontGallery</a>"
             "</p>"
             f"<p><b>{self.about_technologies_title_text}</b><br/>{self.about_technologies_text}</p>"
             "</div>"
