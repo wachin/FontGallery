@@ -219,6 +219,25 @@ Generated outputs:
 
 In an English workspace the equivalent album names use English folder names.
 
+### 6.1 Create PDF files easily from the generated HTML albums
+
+At the moment, the GUI does not generate PDF files directly, but creating them manually from the generated HTML files is very easy.
+
+Open any of these files in `Google Chrome`:
+
+- `album-fuentes/album-fuentes.html`
+- `album-fuentes-espanol/album-fuentes-espanol.html`
+- `album-fuentes-tecnicas/album-fuentes-tecnicas.html`
+
+One practical workflow is:
+
+1. Right-click the HTML file.
+2. Open it with `Google Chrome`.
+3. Press `Ctrl + P`.
+4. In destination, choose `Save as PDF`.
+
+This produces a relatively small PDF file and the fonts are displayed well.
+
 ### 7. Generate PNG cards
 
 Click `Generate PNG cards`.
